@@ -1,0 +1,11 @@
+name: RaveVisuals
+version: '1.0'
+main: me.madmagic.ravevisuals.Main
+api-version: 1.19.2
+authors: [ MadMagic ]
+depend: [ ProtocolLib ]
+
+commands:
+  rv:
+    description: a command
+    usage: /<command> [reload, fixture, group, scenario]

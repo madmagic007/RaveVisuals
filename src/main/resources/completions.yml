@@ -1,0 +1,24 @@
+rv:
+  fixture:
+    create: ""
+    remove: /
+    save: ""
+    edit: ""
+    start: /
+    stop: /
+    startmotion: //
+    stopmotion: /
+
+  group:
+    create: //
+    delete: /
+    addfixture: //
+    removefixture: //
+    start: /
+    stop: /
+    startmotion: //
+    stopmotion: /
+
+  scenario: /
+
+  reload: ""
