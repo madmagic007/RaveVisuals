@@ -5,8 +5,6 @@ import org.bukkit.command.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,18 +32,16 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
             e.printStackTrace();
         }
 
-        new UUIDCommand();
         new MasterCommand();
     }
 
-    @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> completes = new ArrayList<>();
         int lPos = args.length -1;
         String path = name;
         String longestPath = name;
-        ConfigurationSection conf = null;
+        ConfigurationSection conf;
 
         for(int i = 0; i < lPos; i++) {
             path += ("." + args[i]);

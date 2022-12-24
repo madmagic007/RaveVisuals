@@ -1,7 +1,7 @@
 name: RaveVisuals
 version: '1.0'
 main: me.madmagic.ravevisuals.Main
-api-version: 1.19.2
+api-version: 1.19
 authors: [ MadMagic ]
 depend: [ ProtocolLib ]
 

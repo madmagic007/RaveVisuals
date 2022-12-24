@@ -1,7 +1,7 @@
-package me.madmagic.ravevisuals.raveold.fixture;
+package me.madmagic.ravevisuals.fixture;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.raveold.base.NMSGuardian;
+import me.madmagic.ravevisuals.base.NMSGuardian;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class Effect {
 
     private BukkitTask task;
-    private Location particleLocation;
+    public Location particleLocation;
 
     public EffectType effect = EffectType.GUARDIAN;
     public ParticleEffect particle = ParticleEffect.REDSTONE;
@@ -119,12 +119,6 @@ public class Effect {
             task.cancel();
             task = null;
         }
-    }
-
-    public void setDirection(float pitch, float yaw) {
-        if (particleLocation == null) return;
-        particleLocation.setPitch(pitch);
-        particleLocation.setYaw(yaw);
     }
 
     public void setGuardianTarget(Location location) {

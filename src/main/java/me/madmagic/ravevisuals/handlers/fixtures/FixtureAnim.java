@@ -1,9 +1,9 @@
-package me.madmagic.ravevisuals.raveold.handlers.fixtures;
+package me.madmagic.ravevisuals.handlers.fixtures;
 
 import me.madmagic.ravevisuals.Util;
-import me.madmagic.ravevisuals.raveold.config.MotionConfig;
-import me.madmagic.ravevisuals.raveold.fixture.Fixture;
-import me.madmagic.ravevisuals.raveold.handlers.GroupHandler;
+import me.madmagic.ravevisuals.config.MotionConfig;
+import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.handlers.GroupHandler;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package me.madmagic.ravevisuals.raveold.handlers.packets;
+package me.madmagic.ravevisuals.handlers.packets;
 
 import net.minecraft.network.protocol.Packet;
 import org.bukkit.Bukkit;

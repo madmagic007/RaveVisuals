@@ -1,11 +1,11 @@
-package me.madmagic.ravevisuals.raveold.fixture;
+package me.madmagic.ravevisuals.fixture;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.raveold.base.NMSArmorStand;
-import me.madmagic.ravevisuals.raveold.handlers.PositioningHelper;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.Motion;
+import me.madmagic.ravevisuals.base.NMSArmorStand;
+import me.madmagic.ravevisuals.handlers.PositioningHelper;
+import me.madmagic.ravevisuals.handlers.fixtures.Motion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -37,8 +38,8 @@ public class Fixture extends NMSArmorStand {
     public Fixture(Location location, String name) {
         super(location.getWorld());
         this.name = name;
-        spawn(location.add(0, -1.7, 0));
-        setHeadTexture(HeadTexture.SPOT_OFF).setPitch(location.getPitch()).setInvisible(true).update();
+        spawn(location.subtract(0, 1.7, 0));
+        setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getPitch(), location.getYaw()).setInvisible(true).update();
         restPitch = location.getPitch();
         restYaw = location.getYaw();
     }
@@ -46,11 +47,11 @@ public class Fixture extends NMSArmorStand {
     public Fixture(Location location, String name, ConfigurationSection config) {
         super(location.getWorld());
         this.name = name;
-        spawn(location.add(0, -1.7, 0));
+        spawn(location.subtract(0, 1.7, 0));
 
         showHead = config.getBoolean("head");
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
-        setPitch(location.getPitch()).setInvisible(true).update();
+        setHeadPose(location.getPitch(), location.getYaw()).setInvisible(true).update();
 
         effect = new Effect(config);
 
@@ -89,11 +90,12 @@ public class Fixture extends NMSArmorStand {
     }
 
     @Override
-    public NMSArmorStand setHeadPose(float pitch, float yaw) {
-        super.setHeadPose(pitch, yaw);
-        setLocation(location).update();
-        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(location);
-        else effect.setDirection(pitch, yaw);
+    public NMSArmorStand setHeadPose(float yaw, float pitch) {
+        super.setHeadPose(yaw, pitch);
+        setLocation(location);
+        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(location.clone().add(0, 1.2, 0));
+        else effect.particleLocation = location;
+
         return this;
     }
 
@@ -110,25 +112,32 @@ public class Fixture extends NMSArmorStand {
         if (isOn) effect.start(nas.getEyeLocation(), null);
     }
 
-    int curPos = 0;
+    int curPos = 1;
     public void startMotion(Motion motion) {
         curMotion = motion;
+        curPos = 1;
         stopMotionTimer();
         turnOn();
-        doTimer();
+
+        if (!motion.relative) {
+            Vector initPos = motion.motion.get(0);
+            setHeadPose((float) initPos.getX(), (float) initPos.getY()).update();
+        }
+
+        doTimer(motion);
     }
 
-    private void doTimer() {
+    private void doTimer(Motion motion) {
         if (!isOn) return;
         stopMotionTimer();
         motionTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (!isOn) return;
                 moveTo(curMotion.motion.get(curPos), curMotion.name);
                 curPos++;
+                if (curMotion == null || !Objects.equals(curMotion.name, motion.name) || !isOn) return;
                 if (curPos >= curMotion.motion.size()) curPos = 0;
-                doTimer();
+                doTimer(motion);
             }
         }.runTaskLaterAsynchronously(Main.instance, 1);
     }
@@ -140,13 +149,13 @@ public class Fixture extends NMSArmorStand {
 
     private void moveTo(Vector dest, String name) {
         if (curMotion.relative) {
-            dest.setX(dest.getX() + restPitch);
-            dest.setZ(dest.getZ() + restYaw);
+            dest.setX(dest.getX() + restYaw);
+            dest.setZ(dest.getZ() + restPitch);
         }
 
         int ticks = curMotion.delay;
-        float stepPitch = (float) ((dest.getX() - location.getPitch()) / ticks);
-        float stepYaw = (float) ((dest.getZ() - location.getYaw()) / ticks);
+        float stepYaw = (float) ((dest.getX() - location.getYaw()) / ticks);
+        float stepPitch = (float) ((dest.getZ() - location.getPitch()) / ticks);
 
         int curTick = 0;
         while (curTick < (ticks -1)) {
@@ -155,9 +164,9 @@ public class Fixture extends NMSArmorStand {
             float newPitch = PositioningHelper.fixRotation(location.getPitch() + stepPitch);
             float newYaw = PositioningHelper.fixRotation(location.getYaw() + stepYaw);
 
-            setHeadPose(newPitch, newYaw).update();
-            curTick++;
+            setHeadPose(newYaw, newPitch).update();
 
+            curTick++;
             try {
                 TimeUnit.MILLISECONDS.sleep(1000/20);
                 if (!isOn) return;

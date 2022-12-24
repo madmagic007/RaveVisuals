@@ -1,11 +1,11 @@
-package me.madmagic.ravevisuals.raveold.handlers.packets;
+package me.madmagic.ravevisuals.handlers.packets;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.raveold.handlers.EditorHandler;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.EditorHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 
 public class PacketListener {
 

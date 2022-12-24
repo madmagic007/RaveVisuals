@@ -1,8 +1,8 @@
-package me.madmagic.ravevisuals.raveold.config;
+package me.madmagic.ravevisuals.config;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.raveold.handlers.scenarios.Scenario;
-import me.madmagic.ravevisuals.raveold.handlers.scenarios.ScenarioHandler;
+import me.madmagic.ravevisuals.handlers.scenarios.Scenario;
+import me.madmagic.ravevisuals.handlers.scenarios.ScenarioHandler;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

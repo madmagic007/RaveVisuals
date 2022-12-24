@@ -1,4 +1,4 @@
-package me.madmagic.ravevisuals.raveold.base;
+package me.madmagic.ravevisuals.base;
 
 import net.minecraft.network.syncher.DataWatcherObject;
 import net.minecraft.network.syncher.DataWatcherRegistry;
@@ -26,8 +26,8 @@ public class NMSGuardian extends NMSEntity {
         setInvisible(true).update();
 
         target = new NMSArmorStand(location.getWorld());
-        target.spawn(location);
-        target.setInvisible(true);
+        target.spawn(location.clone().subtract(0, 0.5, 0));
+        target.setInvisible(true).update();
     }
 
     @Override
@@ -40,11 +40,10 @@ public class NMSGuardian extends NMSEntity {
 
     public void setTarget(Location location, double length) {
         Vector dir = location.getDirection().multiply(length);
-        /*System.out.println(dir.getX());
-        System.out.println(location.getYaw());*/
         Location loc = location.clone();
-        loc.add(dir);
-        target.setLocation(loc.subtract(0, 0.6, 0));
+        loc.add(dir).subtract(0, 0.5, 0);
+
+        target.setLocation(loc);
     }
 
     @Override

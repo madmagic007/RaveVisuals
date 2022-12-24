@@ -1,4 +1,4 @@
-package me.madmagic.ravevisuals.raveold.handlers.scenarios;
+package me.madmagic.ravevisuals.handlers.scenarios;
 
 import me.madmagic.ravevisuals.Main;
 import org.bukkit.configuration.ConfigurationSection;

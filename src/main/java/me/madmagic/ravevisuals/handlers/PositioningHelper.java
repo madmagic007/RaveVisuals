@@ -1,4 +1,4 @@
-package me.madmagic.ravevisuals.raveold.handlers;
+package me.madmagic.ravevisuals.handlers;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

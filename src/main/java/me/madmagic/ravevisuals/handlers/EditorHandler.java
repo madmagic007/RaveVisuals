@@ -1,7 +1,7 @@
-package me.madmagic.ravevisuals.raveold.handlers;
+package me.madmagic.ravevisuals.handlers;
 
-import me.madmagic.ravevisuals.raveold.fixture.Fixture;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -60,7 +60,7 @@ public class EditorHandler {
 
                     if (ep.f == null) return;
                     Location loc = PositioningHelper.inFrontOfLookAt(p, 2).subtract(0, 1.7, 0);
-                    ep.f.setPitch(loc.getPitch()).setLocation(loc).update();
+                    ep.f.setHeadPose(loc.getPitch(), loc.getYaw()).setLocation(loc).update();
                 });
 
                 offline.forEach(editingPlayers::remove);

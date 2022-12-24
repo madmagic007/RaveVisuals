@@ -1,11 +1,11 @@
-package me.madmagic.ravevisuals.raveold.handlers.scenarios;
+package me.madmagic.ravevisuals.handlers.scenarios;
 
 import me.madmagic.ravevisuals.Util;
-import me.madmagic.ravevisuals.raveold.fixture.Effect;
-import me.madmagic.ravevisuals.raveold.fixture.Fixture;
-import me.madmagic.ravevisuals.raveold.handlers.GroupHandler;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.fixture.Effect;
+import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.handlers.GroupHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.awt.*;

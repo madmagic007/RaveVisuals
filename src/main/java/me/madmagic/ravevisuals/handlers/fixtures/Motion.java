@@ -1,6 +1,6 @@
-package me.madmagic.ravevisuals.raveold.handlers.fixtures;
+package me.madmagic.ravevisuals.handlers.fixtures;
 
-import me.madmagic.ravevisuals.raveold.handlers.PositioningHelper;
+import me.madmagic.ravevisuals.handlers.PositioningHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 

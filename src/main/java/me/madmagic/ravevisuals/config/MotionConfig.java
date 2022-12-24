@@ -1,8 +1,8 @@
-package me.madmagic.ravevisuals.raveold.config;
+package me.madmagic.ravevisuals.config;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.Motion;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
+import me.madmagic.ravevisuals.handlers.fixtures.Motion;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

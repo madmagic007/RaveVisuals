@@ -1,21 +1,18 @@
-package me.madmagic.ravevisuals.raveold.base;
+package me.madmagic.ravevisuals.base;
 
 import com.mojang.datafixers.util.Pair;
-import me.madmagic.ravevisuals.raveold.handlers.packets.NMSHandler;
+import me.madmagic.ravevisuals.handlers.packets.NMSHandler;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.UUID;
 
 public class NMSEntity {
 
@@ -23,13 +20,13 @@ public class NMSEntity {
     public Location location;
 
     public void spawn(Location location, Player player) {
-        setLocation(location);
-        PacketPlayOutSpawnEntity packet = entity instanceof EntityLiving ?
-                new PacketPlayOutSpawnEntity(entity) :
-                new PacketPlayOutSpawnEntity(entityId(), entityUniqueId(), location.getX(), location.getY(), location.getZ(), 0.0F, 0.0F, this.entity.ad(), 0, new Vec3D(0.0, 0.0, 0.0), 0.0);
+        this.location = location;
 
-        if (player == null) NMSHandler.sendPackets(packet, entityMetaPacket());
-        else NMSHandler.sendPackets(player, packet, entityMetaPacket());
+        entity.a(location.getX(), location.getY(), location.getZ(), 0, 0);
+        PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity(entity);
+
+        if (player == null) NMSHandler.sendPackets(packet);
+        else NMSHandler.sendPackets(player, packet);
     }
 
     public void spawn(Location location) {
@@ -51,8 +48,7 @@ public class NMSEntity {
 
     public NMSEntity setLocation(Location loc) {
         this.location = loc;
-        entity.a(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        entity.pi
+        entity.a(location.getX(), location.getY(), location.getZ(), location.getYaw(), 0);
         NMSHandler.sendPacket(new PacketPlayOutEntityTeleport(entity));
         return this;
     }
@@ -84,10 +80,6 @@ public class NMSEntity {
 
     public int entityId() {
         return entity.ae();
-    }
-
-    public UUID entityUniqueId() {
-        return entity.co();
     }
 
     public DataWatcher entityDataWatcher() {

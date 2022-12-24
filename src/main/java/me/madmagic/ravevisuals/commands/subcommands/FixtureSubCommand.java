@@ -1,11 +1,12 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
-import me.madmagic.ravevisuals.raveold.handlers.EditorHandler;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.EditorHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FixtureSubCommand extends SubCommand {
@@ -42,8 +43,8 @@ public class FixtureSubCommand extends SubCommand {
     public List<String> getTabCompletions(String path) {
         String[] split = path.split("\\.");
 
+        System.out.println(Arrays.toString(split));
         if (path.startsWith("fixture.startmotion") && split.length == 3) return FixtureAnim.motions.keySet().stream().toList();
-        if (path.startsWith("fixture.stopmotion") && split.length == 3) return FixtureAnim.motions.keySet().stream().toList();
         if (split.length < 4) return FixtureHandler.activeFixtures.keySet().stream().toList();
 
         return super.getTabCompletions(path);

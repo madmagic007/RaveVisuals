@@ -1,6 +1,6 @@
 package me.madmagic.ravevisuals;
 
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

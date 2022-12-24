@@ -4,12 +4,11 @@ import me.madmagic.ravevisuals.commands.subcommands.FixtureSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.ScenarioSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.SubCommand;
-import me.madmagic.ravevisuals.raveold.handlers.GroupHandler;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.GroupHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,7 @@ public class MasterCommand extends CommandBase {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) return false;
 
         String subName = args[0];
@@ -55,7 +54,7 @@ public class MasterCommand extends CommandBase {
 
         List<String> completion = new ArrayList<>();
         subCommands.forEach(subCommand -> {
-            if (subCommand.name.equals(subName)) completion.addAll(subCommand.getTabCompletions(path.replaceFirst("rostercraft\\.", "")));
+            if (subCommand.name.equals(subName)) completion.addAll(subCommand.getTabCompletions(path.replaceFirst("rv\\.", "")));
         });
 
         return completion;

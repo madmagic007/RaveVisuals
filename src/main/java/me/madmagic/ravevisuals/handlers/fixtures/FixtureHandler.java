@@ -1,10 +1,10 @@
-package me.madmagic.ravevisuals.raveold.handlers.fixtures;
+package me.madmagic.ravevisuals.handlers.fixtures;
 
-import me.madmagic.ravevisuals.raveold.fixture.Fixture;
-import me.madmagic.ravevisuals.raveold.handlers.EditorHandler;
-import me.madmagic.ravevisuals.raveold.handlers.PositioningHelper;
-import me.madmagic.ravevisuals.raveold.config.FixtureConfig;
-import me.madmagic.ravevisuals.raveold.handlers.GroupHandler;
+import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.handlers.EditorHandler;
+import me.madmagic.ravevisuals.handlers.PositioningHelper;
+import me.madmagic.ravevisuals.config.FixtureConfig;
+import me.madmagic.ravevisuals.handlers.GroupHandler;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

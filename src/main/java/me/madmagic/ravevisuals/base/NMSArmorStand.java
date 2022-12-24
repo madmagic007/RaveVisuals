@@ -1,5 +1,6 @@
-package me.madmagic.ravevisuals.raveold.base;
+package me.madmagic.ravevisuals.base;
 
+import net.minecraft.core.Vector3f;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
 import org.bukkit.World;
@@ -17,20 +18,10 @@ public class NMSArmorStand extends NMSEntity {
         nas = (ArmorStand) as.getBukkitEntity();
     }
 
-    public NMSArmorStand setPitch(float pitch) {
+    public NMSArmorStand setHeadPose(float yaw, float pitch) {
         location.setPitch(pitch);
-        //as.a(new Vector3f(pitch, 0, 0));
-        return this;
-    }
-
-    public NMSArmorStand setYaw(float yaw) {
         location.setYaw(yaw);
-        return this;
-    }
-
-    public NMSArmorStand setHeadPose(float pitch, float yaw) {
-        setPitch(pitch);
-        setYaw(yaw);
+        as.a(new Vector3f(pitch, 0, 0));
         return this;
     }
 }

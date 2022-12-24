@@ -1,10 +1,10 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
-import me.madmagic.ravevisuals.raveold.config.GroupConfig;
-import me.madmagic.ravevisuals.raveold.fixture.Fixture;
-import me.madmagic.ravevisuals.raveold.handlers.GroupHandler;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.raveold.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.config.GroupConfig;
+import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.handlers.GroupHandler;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
+import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
