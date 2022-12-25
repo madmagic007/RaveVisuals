@@ -6,16 +6,13 @@ libsDirName = 'C:\\Users\\MadMagic\\Desktop\\RosterCraft Server\\plugins'
 archivesBaseName = rootProject.name
 
 repositories {
-    maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-        content {
-            includeGroup 'org.spigotmc'
-        }
-    }
     mavenLocal()
+    jcenter()
+    maven {url "https://repo.dmulloy2.net/repository/public/"}
 }
 dependencies {
     compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
     implementation 'xyz.xenondevs:particle:1.8.1'
 }
 

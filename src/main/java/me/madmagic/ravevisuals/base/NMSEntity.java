@@ -42,6 +42,7 @@ public class NMSEntity {
     }
 
     public NMSEntity setInvisible(boolean invisible) {
+        System.out.println("invisible called: " + invisible);
         entity.j(invisible);
         return this;
     }

@@ -42,8 +42,8 @@ public class ScenarioPart {
     }
 
     private void runOnFixture(Fixture fixture, ConfigurationSection config) {
-        if (config.isBoolean("seton")) {
-            if (config.getBoolean("seton")) fixture.turnOn();
+        if (config.isBoolean("active")) {
+            if (config.getBoolean("active")) fixture.turnOn();
             else fixture.turnOff();
         }
 

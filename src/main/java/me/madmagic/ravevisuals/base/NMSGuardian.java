@@ -16,6 +16,7 @@ public class NMSGuardian extends NMSEntity {
     protected final NMSArmorStand target;
 
     public NMSGuardian(Location location) {
+        System.out.println("new guardian");
         g = new EntityGuardian(EntityTypes.N, ((CraftWorld)location.getWorld()).getHandle());
         this.entity = g;
         ng = (Guardian) g.getBukkitEntity();
@@ -27,7 +28,7 @@ public class NMSGuardian extends NMSEntity {
 
         target = new NMSArmorStand(location.getWorld());
         target.spawn(location.clone().subtract(0, 0.5, 0));
-        target.setInvisible(true).update();
+        target.setInvisible(true).update();//WHY CAN I SET IT INVISIBLE
     }
 
     @Override

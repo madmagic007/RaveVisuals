@@ -60,7 +60,7 @@ public class EditorHandler {
 
                     if (ep.f == null) return;
                     Location loc = PositioningHelper.inFrontOfLookAt(p, 2).subtract(0, 1.7, 0);
-                    ep.f.setHeadPose(loc.getPitch(), loc.getYaw()).setLocation(loc).update();
+                    ep.f.setHeadPose(loc.getYaw(), loc.getPitch()).setLocation(loc).update();
                 });
 
                 offline.forEach(editingPlayers::remove);
