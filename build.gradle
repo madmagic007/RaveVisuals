@@ -16,15 +16,9 @@ dependencies {
     implementation 'xyz.xenondevs:particle:1.8.1'
 }
 
-task fatJar(type: Jar) {
+jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    manifest {
-        attributes 'Main-Class': ''
-    }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    } {
-        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     }
-    with jar
 }

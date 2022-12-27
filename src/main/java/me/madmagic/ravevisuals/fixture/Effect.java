@@ -4,7 +4,6 @@ import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.base.NMSGuardian;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Consumer;
@@ -51,23 +50,22 @@ public class Effect {
         return directionModifier.getX() + ";" + directionModifier.getY() + ";" + directionModifier.getZ();
     }
 
-    public void start(Location location, Player player) {
-        particleLocation = location;
+    public void start(Location location) {
+        particleLocation = location.clone();
         stop();
 
         if (effect.equals(EffectType.GUARDIAN)) {
             if (guardian == null) guardian = new NMSGuardian(location);
-            guardian.spawn(player);
             guardian.setTarget(location, length);
             return;
         }
 
-        task = (new BukkitRunnable() {
+        task = new BukkitRunnable() {
             @Override
             public void run() {
                 shape.action.accept(Effect.this);
             }
-        }).runTaskTimerAsynchronously(Main.instance, 0, 0);
+        }.runTaskTimerAsynchronously(Main.instance, 0, 0);
     }
 
     private void createLine() {
@@ -113,7 +111,7 @@ public class Effect {
     public void stop() {
         if (guardian != null) {
             guardian.deSpawn();
-            guardian = null; //memory clearing
+            guardian = null;
         }
         if (task != null) {
             task.cancel();

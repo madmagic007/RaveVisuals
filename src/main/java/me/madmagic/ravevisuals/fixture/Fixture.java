@@ -39,7 +39,7 @@ public class Fixture extends NMSArmorStand {
         super(location.getWorld());
         this.name = name;
         spawn(location.subtract(0, 1.7, 0));
-        setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getPitch(), location.getYaw()).setInvisible(true).update();
+        setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getYaw(), location.getPitch()).setInvisible(true).update();
         restPitch = location.getPitch();
         restYaw = location.getYaw();
     }
@@ -51,7 +51,7 @@ public class Fixture extends NMSArmorStand {
 
         showHead = config.getBoolean("head");
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
-        setHeadPose(location.getPitch(), location.getYaw()).setInvisible(true).update();
+        setHeadPose(location.getYaw(), location.getPitch()).setInvisible(true).update();
 
         effect = new Effect(config);
 
@@ -66,14 +66,14 @@ public class Fixture extends NMSArmorStand {
 
         if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) {
             effect.guardian.spawn(player);
-            effect.setGuardianTarget(location);
+            effect.setGuardianTarget(location.add(0, 1.7, 0));
         }
     }
 
     public void turnOn() {
         isOn = true;
         if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).update();
-        effect.start(nas.getEyeLocation(), null);
+        effect.start(location.add(0, 1.7, 0));
     }
 
     public void turnOff() {
@@ -86,7 +86,7 @@ public class Fixture extends NMSArmorStand {
     }
 
     public void resetToDefault() {
-        setHeadPose(restPitch, restYaw).setLocation(location).update();
+        setHeadPose(restYaw, restPitch).setLocation(location).update();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Fixture extends NMSArmorStand {
         super.setHeadPose(yaw, pitch);
         setLocation(location);
         if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(location.clone().add(0, 1.2, 0));
-        else effect.particleLocation = location;
+        else effect.particleLocation = location.clone().add(0, 1.7, 0);
 
         return this;
     }
@@ -109,7 +109,7 @@ public class Fixture extends NMSArmorStand {
         if (effect.effect.equals(type)) return;
         if (isOn) effect.stop();
         effect.effect = type;
-        if (isOn) effect.start(nas.getEyeLocation(), null);
+        if (isOn) effect.start(nas.getEyeLocation());
     }
 
     int curPos = 1;

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class NMSEntity {
 
-    protected Entity entity = null;
+    protected Entity entity;
     public Location location;
 
     public void spawn(Location location, Player player) {
@@ -42,7 +42,6 @@ public class NMSEntity {
     }
 
     public NMSEntity setInvisible(boolean invisible) {
-        System.out.println("invisible called: " + invisible);
         entity.j(invisible);
         return this;
     }
