@@ -32,7 +32,7 @@ public class FixtureHandler {
         Fixture f = new Fixture(loc, name);
         activeFixtures.put(name, f);
         f.setInvisible(false).setCustomName(name).update(player);
-        player.sendMessage("Fixture created, make sure to use '/projector save' after you are done editing");
+        player.sendMessage("Fixture created, make sure to use '/rv fixture save' after you are done editing");
     }
 
     public static void removeFromCommand(CommandSender sender, String[] cmdArgs) {
@@ -47,7 +47,7 @@ public class FixtureHandler {
         f.deSpawn();
         activeFixtures.remove(name);
         if (sender instanceof Player player) EditorHandler.startEditMode(player);
-        sender.sendMessage("Fixture removed, make sure to use '/projector save' after you are done editing");
+        sender.sendMessage("Fixture removed, make sure to use '/rv fixture save' after you are done editing");
     }
 
     public static void spawnAllForPlayer(Player player) {
