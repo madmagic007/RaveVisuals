@@ -2,7 +2,7 @@ package me.madmagic.ravevisuals.handlers.packets;
 
 import net.minecraft.network.protocol.Packet;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NMSHandler {
@@ -20,6 +20,6 @@ public class NMSHandler {
     }
 
     public static void sendPacket(Player player, Packet<?> packet) {
-        ((CraftPlayer)player).getHandle().b.a(packet);
+        ((CraftPlayer)player).getHandle().c.a(packet);
     }
 }

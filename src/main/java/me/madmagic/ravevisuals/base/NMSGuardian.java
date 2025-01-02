@@ -5,7 +5,7 @@ import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.EntityGuardian;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.util.Vector;
 
 public class NMSGuardian extends NMSEntity {
@@ -13,7 +13,7 @@ public class NMSGuardian extends NMSEntity {
     protected final NMSArmorStand target;
 
     public NMSGuardian(Location location) {
-        g = new EntityGuardian(EntityTypes.N, ((CraftWorld)location.getWorld()).getHandle());
+        g = new EntityGuardian(EntityTypes.V, ((CraftWorld)location.getWorld()).getHandle());
         this.entity = g;
 
         location.subtract(0, 0.5, 0);
@@ -25,7 +25,7 @@ public class NMSGuardian extends NMSEntity {
         target.spawn(location.clone().subtract(0, 0.5, 0));
         target.setInvisible(true).update();//WHY CANT I SET IT INVISIBLE
 
-        g.ai().b(new DataWatcherObject<>(17, DataWatcherRegistry.b), target.entityId());
+        g.aj().b(new DataWatcherObject<>(17, DataWatcherRegistry.b), target.entityId());
         update();
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EnumItemSlot;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,6 +22,7 @@ public class NMSEntity {
     public void spawn(Location location, Player player) {
         this.location = location;
 
+        entity.persistentInvisibility = false;
         entity.a(location.getX(), location.getY(), location.getZ(), 0, 0);
         PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity(entity);
 
@@ -79,14 +80,14 @@ public class NMSEntity {
     }
 
     public int entityId() {
-        return entity.ae();
+        return entity.af();
     }
 
     public DataWatcher entityDataWatcher() {
-        return entity.ai();
+        return entity.aj();
     }
 
     public PacketPlayOutEntityMetadata entityMetaPacket() {
-        return new PacketPlayOutEntityMetadata(entityId(), entityDataWatcher(), true);
+        return new PacketPlayOutEntityMetadata(entityId(), entityDataWatcher().c());
     }
 }

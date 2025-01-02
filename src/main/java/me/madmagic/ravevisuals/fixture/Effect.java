@@ -8,8 +8,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Consumer;
 import org.bukkit.util.Vector;
-import xyz.xenondevs.particle.ParticleBuilder;
-import xyz.xenondevs.particle.ParticleEffect;
 
 import java.awt.*;
 import java.util.stream.Stream;
@@ -20,7 +18,7 @@ public class Effect {
     public Location particleLocation;
 
     public EffectType effect = EffectType.GUARDIAN;
-    public ParticleEffect particle = ParticleEffect.REDSTONE;
+    //public ParticleEffect particle = ParticleEffect.REDSTONE;
     public ParticleShape shape = ParticleShape.LINE;
     public Color col = Color.decode("#0071fd");
     public Vector directionModifier = new Vector(0, 0, 0);
@@ -36,7 +34,7 @@ public class Effect {
         effect = EffectType.valueOf(config.getString("effect").toUpperCase());
         config = config.getConfigurationSection("particle");
 
-        particle = ParticleEffect.valueOf(config.getString("particle").toUpperCase());
+        //particle = ParticleEffect.valueOf(config.getString("particle").toUpperCase());
         shape = ParticleShape.valueOf(config.getString("shape").toUpperCase());
         col = Color.decode(config.getString("color"));
         double[] split = Stream.of(config.getString("direction").split(";")).mapToDouble(Double::parseDouble).toArray();
@@ -69,43 +67,43 @@ public class Effect {
     }
 
     private void createLine() {
-        Vector direction = particleLocation.getDirection();
-        for (double i = 0.1; i < length; i+= 0.3) {
-            direction.multiply(i);
-            particleLocation.add(direction);
-            ParticleBuilder pb = new ParticleBuilder(particle, particleLocation)
-                    .setColor(col)
-                    .setAmount(amount)
-                    .setOffset(directionModifier)
-                    .setSpeed((float) speed);
-            pb.display();
-            particleLocation.subtract(direction);
-            direction.normalize();
-        }
+//        Vector direction = particleLocation.getDirection();
+//        for (double i = 0.1; i < length; i+= 0.3) {
+//            direction.multiply(i);
+//            particleLocation.add(direction);
+//            ParticleBuilder pb = new ParticleBuilder(particle, particleLocation)
+//                    .setColor(col)
+//                    .setAmount(amount)
+//                    .setOffset(directionModifier)
+//                    .setSpeed((float) speed);
+//            pb.display();
+//            particleLocation.subtract(direction);
+//            direction.normalize();
+//        }
     }
 
     private double radius = 0;
     private void createCircle() {
-        double amt = 90 * amount;
-
-        for (double i = .2; i < amt; i++) {
-            double x = radius * Math.cos(i);
-            double y = radius * Math.sin(i);
-            Vector dir = new Vector(x, 0, y);
-            particleLocation.add(dir);
-
-            ParticleBuilder pb = new ParticleBuilder(particle, particleLocation)
-                    .setColor(col)
-                    .setOffset(dir)
-                    .setSpeed((float) speed);
-
-            pb.display();
-
-            particleLocation.subtract(dir);
-        }
-
-        radius += .2;
-        if (radius > length) radius = 0;
+//        double amt = 90 * amount;
+//
+//        for (double i = .2; i < amt; i++) {
+//            double x = radius * Math.cos(i);
+//            double y = radius * Math.sin(i);
+//            Vector dir = new Vector(x, 0, y);
+//            particleLocation.add(dir);
+//
+//            ParticleBuilder pb = new ParticleBuilder(particle, particleLocation)
+//                    .setColor(col)
+//                    .setOffset(dir)
+//                    .setSpeed((float) speed);
+//
+//            pb.display();
+//
+//            particleLocation.subtract(dir);
+//        }
+//
+//        radius += .2;
+//        if (radius > length) radius = 0;
     }
 
     public void stop() {

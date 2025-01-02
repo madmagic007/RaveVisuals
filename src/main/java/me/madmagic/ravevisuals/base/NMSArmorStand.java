@@ -4,7 +4,7 @@ import net.minecraft.core.Vector3f;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 
 public class NMSArmorStand extends NMSEntity {

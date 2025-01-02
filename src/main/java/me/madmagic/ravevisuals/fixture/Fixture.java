@@ -73,7 +73,7 @@ public class Fixture extends NMSArmorStand {
     public void turnOn() {
         isOn = true;
         if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).update();
-        effect.start(location.add(0, 1.7, 0));
+        effect.start(location.clone().add(0, 1.7, 0));
     }
 
     public void turnOff() {
