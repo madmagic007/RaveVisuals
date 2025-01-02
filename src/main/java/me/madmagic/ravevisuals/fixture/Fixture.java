@@ -1,11 +1,12 @@
 package me.madmagic.ravevisuals.fixture;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.base.NMSArmorStand;
 import me.madmagic.ravevisuals.handlers.PositioningHelper;
 import me.madmagic.ravevisuals.handlers.fixtures.Motion;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,7 +18,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -35,10 +35,10 @@ public class Fixture extends NMSArmorStand {
     private Motion curMotion;
     private BukkitTask motionTask;
 
-    public Fixture(Location location, String name) {
+    public Fixture(Location location, String name, Player player) {
         super(location.getWorld());
         this.name = name;
-        spawn(location.subtract(0, 1.7, 0));
+        spawn(location.subtract(0, 1.7, 0), player);
         setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getYaw(), location.getPitch()).setInvisible(true).update();
         restPitch = location.getPitch();
         restYaw = location.getYaw();
@@ -190,20 +190,13 @@ public class Fixture extends NMSArmorStand {
 
         public ItemStack toItemStack() {
             ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
-            SkullMeta meta = (SkullMeta) playerHead.getItemMeta();
 
-            GameProfile gp = new GameProfile(UUID.randomUUID(), "");
-            gp.getProperties().put("textures", new Property("textures", base64));
+            playerHead.editMeta(SkullMeta.class, skullMeta -> {
+                PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID(), "");
+                playerProfile.setProperty(new ProfileProperty("textures", base64));
 
-            Field profileField;
-            try {
-                profileField = meta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(meta, gp);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            playerHead.setItemMeta(meta);
+                skullMeta.setPlayerProfile(playerProfile);
+            });
 
             return playerHead;
         }

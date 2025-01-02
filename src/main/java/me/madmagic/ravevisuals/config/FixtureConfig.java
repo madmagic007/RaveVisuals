@@ -32,7 +32,7 @@ public class FixtureConfig {
 
             p += "particle.";
             Effect e = f.effect;
-            config.set(p + "particle", e.particle.name().toLowerCase());
+            //config.set(p + "particle", e.particle.name().toLowerCase());
             config.set(p + "shape", e.shape.toString().toLowerCase());
             config.set(p + "color", String.format("#%06X", (0xFFFFFF & e.col.getRGB())));
             config.set(p + "direction", e.dirToString());
