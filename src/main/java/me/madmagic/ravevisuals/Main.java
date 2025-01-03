@@ -1,9 +1,7 @@
 package me.madmagic.ravevisuals;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
 import me.madmagic.ravevisuals.commands.CommandBase;
 import me.madmagic.ravevisuals.config.FixtureConfig;
 import me.madmagic.ravevisuals.config.GroupConfig;
@@ -40,9 +38,6 @@ public final class Main extends JavaPlugin {
         PacketListener.init();
 
         console.sendMessage(ChatColor.BLUE + "Finished loading RaveVisuals. Took " + (System.currentTimeMillis() - timeNow) + "ms.");
-
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_POSITION_SYNC);
-        console.sendMessage("" + packet.getStructures().getValues());
     }
 
     @Override

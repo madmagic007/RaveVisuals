@@ -9,10 +9,8 @@ import me.madmagic.ravevisuals.handlers.packets.NMSHandler;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
 import net.minecraft.network.syncher.DataWatcher;
-import net.minecraft.server.level.EntityTrackerEntry;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +19,6 @@ public class NMSEntity {
 
     protected Entity entity;
     public Location location;
-    public EntityTrackerEntry tracker;
 
     public void spawn(Location location, Player player) {
         this.location = location;
@@ -60,14 +57,13 @@ public class NMSEntity {
         this.location = loc;
         entity.a(location.getX(), location.getY(), location.getZ(), 0, 0);
 
-        var locationPacket = LibHandler.createMovePacket(this);
-        LibHandler.sendPacket(locationPacket);
+        LibHandler.sendPacket(LibHandler.createMovePacket(this));
 
         return this;
     }
 
     public NMSEntity setHelmet(ItemStack item) {
-        //NMSHandler.sendPacket(new PacketPlayOutEntityEquipment(entityId(), List.of(new Pair<>(EnumItemSlot.a("head"), CraftItemStack.asNMSCopy(item)))));
+        LibHandler.sendPacket(LibHandler.createSetHelmetPacket(this, item));
         return this;
     }
 
@@ -87,7 +83,6 @@ public class NMSEntity {
     }
 
     public void update(Player player) {
-        tracker.a(((CraftPlayer) player).getHandle());
         Main.console.sendMessage("Update for");
         if (player == null) NMSHandler.sendPacket(entityMetaPacket());
         else NMSHandler.sendPacket(player, entityMetaPacket());
@@ -102,7 +97,9 @@ public class NMSEntity {
     }
 
     public PacketPlayOutEntityMetadata entityMetaPacket() {
-        return new PacketPlayOutEntityMetadata(entityId(), entityDataWatcher().c());
+        //return new PacketPlayOutEntityMetadata(entityId(), entityDataWatcher().c());
+
+        //https://github.com/dmulloy2/ProtocolLib/issues/3316
     }
 
     public EntityType getEntityType() {

@@ -1,13 +1,19 @@
 package me.madmagic.ravevisuals.handlers;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.Pair;
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.base.NMSEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
+import java.util.List;
 import java.util.UUID;
 
 public class LibHandler {
@@ -39,17 +45,26 @@ public class LibHandler {
 
         Location location = entity.location;
 
-        var modifier = packet.getModifier();
+        packet.getIntegers().write(0, entity.entityId());
 
-        modifier.write(0, entity.entityId());
-        modifier.write(1, location.getX());
-        modifier.write(2, location.getY());
-        modifier.write(3, location.getZ());
+        InternalStructure is = packet.getStructures().getValues().get(0);
 
-//        packet.getBytes()
-//                .write(4, (byte) (location.getYaw() * 256.0F / 360.0F))
-//                .write(5, (byte) (location.getPitch() * 256.0F / 360.0F))
-//                .write(5, (byte) (location.getYaw() * 256.0F / 360.0F));
+        is.getVectors()
+                .write(0, new Vector(location.getX(), location.getY(), location.getZ()))
+                .write(1, new Vector(0, 0, 0));
+
+        is.getFloat()
+                .write(0, location.getYaw())
+                .write(1, location.getYaw());
+
+        return packet;
+    }
+
+    public static PacketContainer createSetHelmetPacket(NMSEntity entity, ItemStack item) {
+        var packet = new PacketContainer(PacketType.Play.Server.ENTITY_EQUIPMENT);
+
+        packet.getIntegers().write(0, entity.entityId());
+        packet.getSlotStackPairLists().write(0, List.of(new Pair<>(EnumWrappers.ItemSlot.HEAD, item)));
 
         return packet;
     }

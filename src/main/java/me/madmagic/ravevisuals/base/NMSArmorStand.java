@@ -20,8 +20,8 @@ public class NMSArmorStand extends NMSEntity {
     }
 
     public NMSArmorStand setHeadPose(float yaw, float pitch) {
-        location.setPitch(pitch);
-        location.setYaw(yaw);
+        //location.setPitch(pitch);
+        //location.setYaw(yaw);
         as.a(new Vector3f(pitch, 0, 0));
         return this;
     }
