@@ -25,7 +25,7 @@ public class FixtureConfig {
         YamlConfiguration config = new YamlConfiguration();
         FixtureHandler.activeFixtures.forEach((s, f) -> {
             String p = s + ".";
-            config.set(p + "location", f.location);
+            config.set(p + "location", f.getLocation());
 
             config.set(p + "effect", f.effect.effect.name().toLowerCase());
             config.set(p + "head", f.showHead);

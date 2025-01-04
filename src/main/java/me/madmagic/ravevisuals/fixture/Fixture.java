@@ -6,6 +6,7 @@ import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.base.NMSArmorStand;
 import me.madmagic.ravevisuals.handlers.PositioningHelper;
 import me.madmagic.ravevisuals.handlers.fixtures.Motion;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class Fixture extends NMSArmorStand {
 
     public final String name;
-    private ItemStack headItem;
     public boolean isOn = false;
     public boolean showHead = true;
     public Effect effect = new Effect();
@@ -35,73 +35,70 @@ public class Fixture extends NMSArmorStand {
     private Motion curMotion;
     private BukkitTask motionTask;
 
-    public Fixture(Location location, String name, Player player) {
-        super(location.getWorld());
+    public Fixture(Location location, String name) {
+        super(location.subtract(0, 1.7, 0));
+
         this.name = name;
-        spawn(location.subtract(0, 1.7, 0), player);
-        setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getYaw(), location.getPitch()).setInvisible(true).update();
         restPitch = location.getPitch();
         restYaw = location.getYaw();
+
+        setHeadTexture(HeadTexture.SPOT_OFF).setHeadPose(location.getYaw(), location.getPitch());
     }
 
     public Fixture(Location location, String name, ConfigurationSection config) {
-        super(location.getWorld());
-        this.name = name;
-        spawn(location.subtract(0, 1.7, 0));
+        this(location, name);
 
         showHead = config.getBoolean("head");
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
-        setHeadPose(location.getYaw(), location.getPitch()).setInvisible(true).update();
+        setHeadPose(location.getYaw(), location.getPitch());
 
         effect = new Effect(config);
-
-        restPitch = location.getPitch();
-        restYaw = location.getYaw();
     }
 
     public void lateSpawn(Player player) {
         spawn(player);
-        if (showHead) setHelmet(headItem);
-        setInvisible(true).hideCustomName().update(player);
+
+        if (showHead) syncHelmet(player);
 
         if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) {
             effect.guardian.spawn(player);
-            effect.setGuardianTarget(location.add(0, 1.7, 0));
         }
     }
 
-    public void turnOn() {
+    public void turnOn(Player... player) {
         isOn = true;
-        if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).update();
-        effect.start(location.add(0, 1.7, 0));
+
+        if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).syncHelmet(player);
+
+        effect.start(getLocation().clone().add(0, 1.7, 0));
     }
 
-    public void turnOff() {
+    public void turnOff(Player... player) {
         isOn = false;
-        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).update();
+
+        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
+
         effect.stop();
         stopMotionTimer();
         curMotion = null;
-        resetToDefault();
-    }
 
-    public void resetToDefault() {
-        setHeadPose(restYaw, restPitch).setLocation(location).update();
+        setHeadPose(restYaw, restPitch).syncHeadPose(player);
     }
 
     @Override
     public NMSArmorStand setHeadPose(float yaw, float pitch) {
         super.setHeadPose(yaw, pitch);
-        setLocation(location);
-        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(location.clone().add(0, 1.2, 0));
-        else effect.particleLocation = location.clone().add(0, 1.7, 0);
+
+        Location clone = getLocation().clone();
+
+        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(clone.add(0, 1.2, 0));
+        else effect.particleLocation = clone.add(0, 1.7, 0);
 
         return this;
     }
 
     public Fixture setHeadTexture(HeadTexture texture) {
-        headItem = texture.toItemStack();
-        setHelmet(headItem);
+        setHelmet(texture.toItemStack());
         return this;
     }
 
@@ -109,7 +106,9 @@ public class Fixture extends NMSArmorStand {
         if (effect.effect.equals(type)) return;
         if (isOn) effect.stop();
         effect.effect = type;
-        if (isOn) effect.start(nas.getEyeLocation());
+
+        Vec3 loc = getEntity().getEyePosition();
+        if (isOn) effect.start(getLocation().clone().set(loc.x, loc.y, loc.z));
     }
 
     int curPos = 1;
@@ -121,7 +120,7 @@ public class Fixture extends NMSArmorStand {
 
         if (!motion.relative) {
             Vector initPos = motion.motion.get(0);
-            setHeadPose((float) initPos.getX(), (float) initPos.getY()).update();
+            setHeadPose((float) initPos.getX(), (float) initPos.getY()).syncMetaData();
         }
 
         doTimer(motion);
@@ -153,6 +152,8 @@ public class Fixture extends NMSArmorStand {
             dest.setZ(dest.getZ() + restPitch);
         }
 
+        Location location = getLocation();
+
         int ticks = curMotion.delay;
         float stepYaw = (float) ((dest.getX() - location.getYaw()) / ticks);
         float stepPitch = (float) ((dest.getZ() - location.getPitch()) / ticks);
@@ -164,7 +165,7 @@ public class Fixture extends NMSArmorStand {
             float newPitch = PositioningHelper.fixRotation(location.getPitch() + stepPitch);
             float newYaw = PositioningHelper.fixRotation(location.getYaw() + stepYaw);
 
-            setHeadPose(newYaw, newPitch).update();
+            setHeadPose(newYaw, newPitch).syncMetaData();
 
             curTick++;
             try {
@@ -174,7 +175,7 @@ public class Fixture extends NMSArmorStand {
         }
 
         //force move in case of any rounding errors
-        setHeadPose((float) dest.getX(), (float) dest.getZ()).update();
+        setHeadPose((float) dest.getX(), (float) dest.getZ()).syncMetaData();
     }
 
     public enum HeadTexture {

@@ -15,7 +15,7 @@ public class EditorHandler {
     public static void startEditMode(Player player) {
         if (editingPlayers.containsKey(player.getUniqueId())) return;
         editingPlayers.put(player.getUniqueId(), new EditingPlayer(null));
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setInvisible(false).setCustomName(s).update(player));
+        FixtureHandler.activeFixtures.forEach((s, f) -> f.setCustomName(s).syncMetaData(player));
         startTimer();
     }
 
@@ -24,7 +24,7 @@ public class EditorHandler {
         if (ep == null) return;
         ep.stopEditingFixture();
         editingPlayers.remove(player.getUniqueId());
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setInvisible(true).hideCustomName().update(player));
+        FixtureHandler.activeFixtures.forEach((s, f) -> f.hideCustomName().syncMetaData(player));
         if (editingPlayers.isEmpty()) stopTimer();
     }
 
@@ -60,7 +60,7 @@ public class EditorHandler {
 
                     if (ep.f == null) return;
                     Location loc = PositioningHelper.inFrontOfLookAt(p, 2).subtract(0, 1.7, 0);
-                    ep.f.setHeadPose(loc.getYaw(), loc.getPitch()).setLocation(loc).update();
+                    ep.f.setHeadPose(loc.getYaw(), loc.getPitch()).setLocation(loc).syncMetaData();
                 });
 
                 offline.forEach(editingPlayers::remove);

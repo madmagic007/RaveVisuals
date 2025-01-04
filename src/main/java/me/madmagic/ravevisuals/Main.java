@@ -24,17 +24,17 @@ public final class Main extends JavaPlugin {
         long timeNow = System.currentTimeMillis();
         console = getServer().getConsoleSender();
         console.sendMessage(ChatColor.BLUE + "Loading RaveVisuals...");
-
+        pm = ProtocolLibrary.getProtocolManager();
         instance = this;
-        getServer().getPluginManager().registerEvents(new EventListener(), this);
-        CommandBase.init();
 
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
+
+        CommandBase.init();
         FixtureConfig.init();
         GroupConfig.init();
         MotionConfig.init();
         ScenarioConfig.init();
 
-        pm = ProtocolLibrary.getProtocolManager();
         PacketListener.init();
 
         console.sendMessage(ChatColor.BLUE + "Finished loading RaveVisuals. Took " + (System.currentTimeMillis() - timeNow) + "ms.");

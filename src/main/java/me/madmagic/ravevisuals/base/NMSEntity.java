@@ -1,108 +1,72 @@
 package me.madmagic.ravevisuals.base;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.handlers.LibHandler;
-import me.madmagic.ravevisuals.handlers.packets.NMSHandler;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
-import net.minecraft.network.syncher.DataWatcher;
+import me.madmagic.ravevisuals.handlers.packets.LibHandler;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-public class NMSEntity {
+public abstract class NMSEntity<T extends NMSEntity<?, ?>, E extends Entity> {
 
-    protected Entity entity;
-    public Location location;
+    private E entity;
+    private Location location;
 
-    public void spawn(Location location, Player player) {
+    public NMSEntity(Class<E> entClass, EntityType<E> entType, Location location) {
         this.location = location;
-
-        entity.a(location.getX(), location.getY(), location.getZ(), 0, 0);
-
-        PacketContainer spawnPacket = LibHandler.createSpawnPackage(this);
-
-        if (player == null) LibHandler.sendPackets(spawnPacket);
-        else LibHandler.sendPackets(player, spawnPacket);
+        try {
+            this.entity = entClass.getConstructor(EntityType.class, Level.class).newInstance(entType, ((CraftWorld) location.getWorld()).getHandle());
+            entity.setInvisible(true);
+        } catch (Exception ignored) {} //won't happen
     }
 
-    public void spawn(Location location) {
-        spawn(location, null);
+    public E getEntity() {
+        return entity;
     }
 
-    public void spawn(Player player) {
-        spawn(location, player);
+    public Location getLocation() {
+        return location;
     }
 
-    public void deSpawn() {
-        //NMSHandler.sendPacket(new PacketPlayOutEntityDestroy(entityId()));
-
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-        packet.getModifier().write(0, new IntArrayList(new int[] { entityId() }));
-
-        LibHandler.sendPacket(packet);
+    public T spawn(Player... player) {
+        LibHandler.spawnEntity(this, player);
+        return (T) this;
     }
 
-    public NMSEntity setInvisible(boolean invisible) {
-        entity.j(invisible);
-        return this;
+    public void deSpawn(Player... player) {
+        LibHandler.deSpawnEntity(this, player);
     }
 
-    public NMSEntity setLocation(Location loc) {
+    public T setLocation(Location loc) {
         this.location = loc;
-        entity.a(location.getX(), location.getY(), location.getZ(), 0, 0);
-
-        LibHandler.sendPacket(LibHandler.createMovePacket(this));
-
-        return this;
+        return (T) this;
     }
 
-    public NMSEntity setHelmet(ItemStack item) {
-        LibHandler.sendPacket(LibHandler.createSetHelmetPacket(this, item));
-        return this;
+    public T syncLocation(Player... player) {
+        LibHandler.moveEntity(this, player);
+        return (T) this;
     }
 
-    public NMSEntity setCustomName(String name) {
-        entity.b(IChatBaseComponent.b(name));
-        entity.n(true);
-        return this;
+    public T setCustomName(String name) {
+        entity.setCustomName(Component.literal(name));
+        entity.setCustomNameVisible(true);
+        return (T) this;
     }
 
-    public NMSEntity hideCustomName() {
-        entity.n(false);
-        return this;
+    public T hideCustomName() {
+        entity.setCustomNameVisible(false);
+        return (T) this;
     }
 
-    public void update() {
-        NMSHandler.sendPacket(entityMetaPacket());
-    }
-
-    public void update(Player player) {
-        Main.console.sendMessage("Update for");
-        if (player == null) NMSHandler.sendPacket(entityMetaPacket());
-        else NMSHandler.sendPacket(player, entityMetaPacket());
+    public void syncMetaData(Player... player) {
+        LibHandler.syncMetaData(this, player);
     }
 
     public int entityId() {
-        return entity.ar();
+        return entity.getId();
     }
 
-    public DataWatcher entityDataWatcher() {
-        return entity.au();
-    }
-
-    public PacketPlayOutEntityMetadata entityMetaPacket() {
-        //return new PacketPlayOutEntityMetadata(entityId(), entityDataWatcher().c());
-
-        //https://github.com/dmulloy2/ProtocolLib/issues/3316
-    }
-
-    public EntityType getEntityType() {
-        return null;
-    }
+    public abstract org.bukkit.entity.EntityType getEntityType();
 }

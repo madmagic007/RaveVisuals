@@ -29,9 +29,9 @@ public class FixtureHandler {
 
         EditorHandler.startEditMode(player);
         Location loc = PositioningHelper.inFrontOfLookAt(player, 2);
-        Fixture f = new Fixture(loc, name, player);
+        Fixture f = new Fixture(loc, name);
         activeFixtures.put(name, f);
-        f.setInvisible(false).setCustomName(name).update(player);
+        f.setInvisible(false).setCustomName(name).syncMetaData(player);
         player.sendMessage("Fixture created, make sure to use '/rv fixture save' after you are done editing");
     }
 

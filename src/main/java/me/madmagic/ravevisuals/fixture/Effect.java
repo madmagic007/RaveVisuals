@@ -53,8 +53,7 @@ public class Effect {
         stop();
 
         if (effect.equals(EffectType.GUARDIAN)) {
-            if (guardian == null) guardian = new NMSGuardian(location);
-            guardian.setTarget(location, length);
+            if (guardian == null) guardian = new NMSGuardian(location, length);
             return;
         }
 
@@ -118,7 +117,7 @@ public class Effect {
     }
 
     public void setGuardianTarget(Location location) {
-        if (guardian != null) guardian.setTarget(location, length);
+        if (guardian != null) guardian.moveBeam(location, length);
     }
 
     public enum EffectType {
