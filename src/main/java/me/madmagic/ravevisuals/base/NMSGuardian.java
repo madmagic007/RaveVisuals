@@ -37,6 +37,13 @@ public class NMSGuardian extends NMSEntity<NMSGuardian, Guardian> {
     }
 
     @Override
+    public NMSGuardian syncAll(Player... player) {
+        super.syncAll(player);
+        syncBeam(player);
+        return this;
+    }
+
+    @Override
     public NMSGuardian spawn(Player... player) {
         super.spawn(player);
         target.spawn(player);

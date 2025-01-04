@@ -4,7 +4,6 @@ import me.madmagic.ravevisuals.handlers.EditorHandler;
 import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
 import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -21,13 +20,7 @@ public class FixtureSubCommand extends SubCommand {
                 case "create" -> FixtureHandler.createFromCommand(sender, args);
                 case "remove" -> FixtureHandler.removeFromCommand(sender, args);
                 case "save" -> FixtureHandler.save(sender);
-                case "edit" -> {
-                    if (!(sender instanceof Player player)) {
-                        sender.sendMessage("Only a player may run this command");
-                        return;
-                    }
-                    EditorHandler.startEditMode(player);
-                }
+                case "edit" -> EditorHandler.startEditMode(sender);
                 case "start" -> FixtureAnim.start(args[1]);
                 case "stop" -> FixtureAnim.stop(args[1]);
                 case "startmotion" -> FixtureAnim.startFromCommand(sender, args, false);

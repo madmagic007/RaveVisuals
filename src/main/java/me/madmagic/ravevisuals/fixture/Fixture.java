@@ -73,7 +73,7 @@ public class Fixture extends NMSArmorStand {
         effect.start(getLocation().clone().add(0, 1.7, 0));
     }
 
-    public void turnOff(Player... player) {
+    public Fixture turnOff(Player... player) {
         isOn = false;
 
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
@@ -83,6 +83,8 @@ public class Fixture extends NMSArmorStand {
         curMotion = null;
 
         setHeadPose(restYaw, restPitch).syncHeadPose(player);
+
+        return this;
     }
 
     @Override

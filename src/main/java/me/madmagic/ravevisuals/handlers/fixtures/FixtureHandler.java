@@ -21,17 +21,21 @@ public class FixtureHandler {
             sender.sendMessage("Only a player may run this command");
             return;
         }
+
         String name = cmdArgs[1];
         if (activeFixtures.containsKey(name)) {
             sender.sendMessage("A fixture with that name already exists");
             return;
         }
 
-        EditorHandler.startEditMode(player);
+
         Location loc = PositioningHelper.inFrontOfLookAt(player, 2);
         Fixture f = new Fixture(loc, name);
+        f.spawn().syncAll();
+
         activeFixtures.put(name, f);
-        f.setInvisible(false).setCustomName(name).syncMetaData(player);
+        EditorHandler.startEditMode(player);
+
         player.sendMessage("Fixture created, make sure to use '/rv fixture save' after you are done editing");
     }
 
@@ -42,10 +46,9 @@ public class FixtureHandler {
             return;
         }
 
-        Fixture f = activeFixtures.get(name);
-        f.turnOff();
-        f.deSpawn();
+        activeFixtures.get(name).turnOff().deSpawn();
         activeFixtures.remove(name);
+
         if (sender instanceof Player player) EditorHandler.startEditMode(player);
         sender.sendMessage("Fixture removed, make sure to use '/rv fixture save' after you are done editing");
     }
@@ -63,8 +66,7 @@ public class FixtureHandler {
 
     public static void despawnAll() {
         activeFixtures.forEach((s, f) -> {
-            f.turnOff();
-            f.deSpawn();
+            f.turnOff().deSpawn();
         });
 
         activeFixtures.clear();
@@ -73,6 +75,8 @@ public class FixtureHandler {
     public static void createFromConfig(String name, ConfigurationSection conf) {
         Location loc = conf.getLocation("location").add(0, 1.7, 0);
         Fixture f = new Fixture(loc, name, conf);
+        f.spawn();
+
         activeFixtures.put(name, f);
     }
 

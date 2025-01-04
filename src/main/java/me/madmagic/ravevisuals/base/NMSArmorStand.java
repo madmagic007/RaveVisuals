@@ -43,6 +43,14 @@ public class NMSArmorStand extends NMSEntity<NMSArmorStand, ArmorStand> {
     }
 
     @Override
+    public NMSArmorStand syncAll(Player... player) {
+        super.syncAll(player);
+        syncHeadPose(player);
+        syncHelmet(player);
+        return this;
+    }
+
+    @Override
     public org.bukkit.entity.EntityType getEntityType() {
         return org.bukkit.entity.EntityType.ARMOR_STAND;
     }

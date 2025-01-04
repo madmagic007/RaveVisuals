@@ -60,8 +60,15 @@ public abstract class NMSEntity<T extends NMSEntity<?, ?>, E extends Entity> {
         return (T) this;
     }
 
-    public void syncMetaData(Player... player) {
+    public T syncMetaData(Player... player) {
         LibHandler.syncMetaData(this, player);
+        return (T) this;
+    }
+
+    public T syncAll(Player... player) {
+        syncLocation(player);
+        syncMetaData(player);
+        return (T) this;
     }
 
     public int entityId() {

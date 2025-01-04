@@ -82,7 +82,7 @@ public class LibHandler {
     }
 
     public static void syncMetaData(NMSEntity<?, ?> entity, Player... player) {
-        ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.entityId(), entity.entity.getEntityData().getNonDefaultValues());
+        ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.entityId(), entity.getEntity().getEntityData().getNonDefaultValues());
         sendPacket(packet, player);
     }
 
