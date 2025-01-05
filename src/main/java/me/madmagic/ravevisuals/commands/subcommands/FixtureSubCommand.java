@@ -27,8 +27,7 @@ public class FixtureSubCommand extends SubCommand {
                     else
                         EditorHandler.startEditMode(player);
                 }
-                case "start" -> FixtureHandler.turnOn(args[1]);
-                case "stop" -> FixtureHandler.turnOff(args[1]);
+                case "start", "stop" -> FixtureHandler.turnOn(args[1]);
                 case "startmotion" -> MotionPlayer.startFromCommand(sender, args, false);
                 case "stopmotion" -> MotionPlayer.stopFromCommand(sender, args, false);
             }

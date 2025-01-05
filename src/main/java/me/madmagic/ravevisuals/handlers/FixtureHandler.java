@@ -14,13 +14,13 @@ public class FixtureHandler {
 
     public static HashMap<String, Fixture> activeFixtures = new HashMap<>();
 
-    public static void createFromCommand(CommandSender sender, String[] cmdArgs) {
+    public static void createFromCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Only a player may run this command");
             return;
         }
 
-        String name = cmdArgs[1];
+        String name = args[1];
         if (activeFixtures.containsKey(name)) {
             sender.sendMessage("A fixture with that name already exists");
             return;
@@ -44,8 +44,8 @@ public class FixtureHandler {
         activeFixtures.put(name, f);
     }
 
-    public static void removeFromCommand(CommandSender sender, String[] cmdArgs) {
-        String name = cmdArgs[1];
+    public static void removeFromCommand(CommandSender sender, String[] args) {
+        String name = args[1];
         if (!activeFixtures.containsKey(name)) {
             sender.sendMessage("No fixture with that name found");
             return;
@@ -58,12 +58,15 @@ public class FixtureHandler {
         sender.sendMessage("Fixture removed, make sure to use '/rv fixture save' after you are done editing");
     }
 
-    public static void turnOn(String name) {
-        Util.runIfNotNull(FixtureHandler.activeFixtures.get(name), Fixture::turnOn);
+    public static void toggleFromCommand(CommandSender sender, String[] args) {
+        Util.runIfNotNull(activeFixtures.get(args[1]), f -> toggle(f, args[0].equals("start")), () -> sender.sendMessage("Fixture not found"));
+
+        
     }
 
-    public static void turnOff(String name) {
-        Util.runIfNotNull(FixtureHandler.activeFixtures.get(name), Fixture::turnOff);
+    public static void toggle(Fixture fixture, boolean turnOn) {
+        if (turnOn) fixture.turnOn();
+        else fixture.turnOff();
     }
 
     public static void save(CommandSender sender) {

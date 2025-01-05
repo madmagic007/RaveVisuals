@@ -31,7 +31,7 @@ public class MotionPlayer {
 
         Util.runIfNotNull(motions.get(motionName), m -> {
             if (isGroup) {
-                Util.runIfNotNull(GroupHandler.groups.get(name), l -> startMotion(l, m), () -> sender.sendMessage("Group not found"));
+                Util.runIfNotNull(GroupHandler.groups.get(name), g -> startMotion(g, m), () -> sender.sendMessage("Group not found"));
             } else {
                 Util.runIfNotNull(FixtureHandler.activeFixtures.get(name), f -> startMotion(f, m), () -> sender.sendMessage("Fixture not found"));
             }
