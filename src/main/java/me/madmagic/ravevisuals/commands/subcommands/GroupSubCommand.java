@@ -1,10 +1,10 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
 import me.madmagic.ravevisuals.config.GroupConfig;
-import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.ents.Fixture;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class GroupSubCommand extends SubCommand {
             case "addfixture" -> GroupHandler.addOrRemove(sender, args, true, false);
             case "removefixture" -> GroupHandler.addOrRemove(sender, args, false, false);
             case "start", "stop" -> GroupHandler.toggleAllFromCommand(sender, args);
-            case "startmotion" -> FixtureAnim.startFromCommand(sender, args, true);
-            case "stopmotion" -> FixtureAnim.stopFromCommand(sender, args, true);
+            case "startmotion" -> MotionPlayer.startFromCommand(sender, args, true);
+            case "stopmotion" -> MotionPlayer.stopFromCommand(sender, args, true);
         }
 
         GroupConfig.save();
@@ -36,8 +36,8 @@ public class GroupSubCommand extends SubCommand {
     public List<String> getTabCompletions(String path) {
         String[] split = path.split("\\.");
 
-        if (path.startsWith("group.startmotion") && path.split("\\.").length == 3) return FixtureAnim.motions.keySet().stream().toList();
-        if (path.startsWith("group.stopmotion") && path.split("\\.").length == 3) return FixtureAnim.motions.keySet().stream().toList();
+        if (path.startsWith("group.startmotion") && path.split("\\.").length == 3) return MotionPlayer.motions.keySet().stream().toList();
+        if (path.startsWith("group.stopmotion") && path.split("\\.").length == 3) return MotionPlayer.motions.keySet().stream().toList();
         if (path.startsWith("group.addfixture") && path.split("\\.").length >= 3) return getAvailableFixtures(split);
         if (path.startsWith("group.create") && path.split("\\.").length >= 3) return getExistingNoDuplicates(split);
         if (path.startsWith("group.removefixture") && path.split("\\.").length >= 3) {

@@ -1,6 +1,6 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
-import me.madmagic.ravevisuals.handlers.scenarios.ScenarioHandler;
+import me.madmagic.ravevisuals.handlers.sequences.ScenarioPlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -13,11 +13,11 @@ public class ScenarioSubCommand extends SubCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        ScenarioHandler.runScenario(sender, args[0]);
+        ScenarioPlayer.runScenario(sender, args[0]);
     }
 
     @Override
     public List<String> getTabCompletions(String path) {
-        return ScenarioHandler.scenarios.keySet().stream().toList();
+        return ScenarioPlayer.scenarios.keySet().stream().toList();
     }
 }

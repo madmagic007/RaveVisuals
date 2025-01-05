@@ -1,8 +1,7 @@
-package me.madmagic.ravevisuals.config;
+package me.madmagic.ravevisuals.config.fixture;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.fixture.Effect;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

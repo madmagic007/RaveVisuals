@@ -5,7 +5,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.handlers.EditorHandler;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 
 public class PacketListener {
 

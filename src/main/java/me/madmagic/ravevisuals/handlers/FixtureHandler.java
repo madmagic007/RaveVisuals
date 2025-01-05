@@ -1,10 +1,8 @@
-package me.madmagic.ravevisuals.handlers.fixtures;
+package me.madmagic.ravevisuals.handlers;
 
-import me.madmagic.ravevisuals.fixture.Fixture;
-import me.madmagic.ravevisuals.handlers.EditorHandler;
-import me.madmagic.ravevisuals.handlers.PositioningHelper;
-import me.madmagic.ravevisuals.config.FixtureConfig;
-import me.madmagic.ravevisuals.handlers.GroupHandler;
+import me.madmagic.ravevisuals.Util;
+import me.madmagic.ravevisuals.ents.Fixture;
+import me.madmagic.ravevisuals.config.fixture.FixtureConfig;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,15 +26,22 @@ public class FixtureHandler {
             return;
         }
 
-
-        Location loc = PositioningHelper.inFrontOfLookAt(player, 2);
+        Location loc = PositioningHelper.inFrontOfLookAt(player, 2).subtract(0, 1.7, 0);
         Fixture f = new Fixture(loc, name);
-        f.spawn().syncAll();
+        f.spawn().syncAll().setCustomNameVisible(true, player);
 
         activeFixtures.put(name, f);
         EditorHandler.startEditMode(player);
 
         player.sendMessage("Fixture created, make sure to use '/rv fixture save' after you are done editing");
+    }
+
+    public static void createFromConfig(String name, ConfigurationSection conf) {
+        Location loc = conf.getLocation("location");
+        Fixture f = new Fixture(loc, name, conf);
+        f.spawn().syncAll();
+
+        activeFixtures.put(name, f);
     }
 
     public static void removeFromCommand(CommandSender sender, String[] cmdArgs) {
@@ -53,8 +58,12 @@ public class FixtureHandler {
         sender.sendMessage("Fixture removed, make sure to use '/rv fixture save' after you are done editing");
     }
 
-    public static void spawnAllForPlayer(Player player) {
-        activeFixtures.forEach((s, f) -> f.lateSpawn(player));
+    public static void turnOn(String name) {
+        Util.runIfNotNull(FixtureHandler.activeFixtures.get(name), Fixture::turnOn);
+    }
+
+    public static void turnOff(String name) {
+        Util.runIfNotNull(FixtureHandler.activeFixtures.get(name), Fixture::turnOff);
     }
 
     public static void save(CommandSender sender) {
@@ -70,14 +79,6 @@ public class FixtureHandler {
         });
 
         activeFixtures.clear();
-    }
-
-    public static void createFromConfig(String name, ConfigurationSection conf) {
-        Location loc = conf.getLocation("location").add(0, 1.7, 0);
-        Fixture f = new Fixture(loc, name, conf);
-        f.spawn();
-
-        activeFixtures.put(name, f);
     }
 
     public static void reload() {

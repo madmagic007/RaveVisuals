@@ -1,11 +1,11 @@
-package me.madmagic.ravevisuals.handlers.scenarios;
+package me.madmagic.ravevisuals.config.scenario;
 
 import me.madmagic.ravevisuals.Util;
-import me.madmagic.ravevisuals.fixture.Effect;
-import me.madmagic.ravevisuals.fixture.Fixture;
+import me.madmagic.ravevisuals.config.fixture.Effect;
+import me.madmagic.ravevisuals.ents.Fixture;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.awt.*;
@@ -58,6 +58,6 @@ public class ScenarioPart {
 
         Util.runIfNotNull(config.getString("color"), color -> fixture.effect.col = Color.decode(color));
 
-        Util.runIfNotNull(config.getString("motion"), mot -> FixtureAnim.startMotion(fixture, mot));
+        Util.runIfNotNull(config.getString("motion"), mot -> MotionPlayer.startMotion(fixture, mot));
     }
 }

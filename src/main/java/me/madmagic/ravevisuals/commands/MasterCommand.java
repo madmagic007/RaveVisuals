@@ -5,8 +5,8 @@ import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.ScenarioSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.SubCommand;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -31,7 +31,7 @@ public class MasterCommand extends CommandBase {
         if (subName.equals("reload")) {
             FixtureHandler.reload();
             GroupHandler.reload();
-            FixtureAnim.reload();
+            MotionPlayer.reload();
             sender.sendMessage("Reloaded RaveVisuals");
             return true;
         }

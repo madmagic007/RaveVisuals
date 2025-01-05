@@ -3,9 +3,8 @@ package me.madmagic.ravevisuals.handlers;
 import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
 import me.madmagic.ravevisuals.config.GroupConfig;
-import me.madmagic.ravevisuals.fixture.Effect;
-import me.madmagic.ravevisuals.fixture.Fixture;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.config.fixture.Effect;
+import me.madmagic.ravevisuals.ents.Fixture;
 import org.bukkit.command.CommandSender;
 
 import java.awt.*;

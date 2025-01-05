@@ -24,7 +24,6 @@ public class PositioningHelper {
         return lookAt(inFrontOf(pl, distance), pl);
     }
 
-
     /**
      * because i know this wont make any sense tomorrow, minecrafts rotation ranges -180 to 180 instead of the normal, everywhere else used, very standard implementation of 0 to 360
      */

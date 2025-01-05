@@ -1,7 +1,7 @@
-package me.madmagic.ravevisuals.fixture;
+package me.madmagic.ravevisuals.config.fixture;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.base.NMSGuardian;
+import me.madmagic.ravevisuals.ents.NMSGuardian;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,21 +27,22 @@ public class Effect {
     public double length = 16;
 
     public NMSGuardian guardian;
+    public static Effect fromConfig(ConfigurationSection config) {
+        Effect effect = new Effect();
+        effect.effect = EffectType.valueOf(config.getString("effect").toUpperCase());
 
-    public Effect() {}
-
-    public Effect(ConfigurationSection config) {
-        effect = EffectType.valueOf(config.getString("effect").toUpperCase());
         config = config.getConfigurationSection("particle");
 
         //particle = ParticleEffect.valueOf(config.getString("particle").toUpperCase());
-        shape = ParticleShape.valueOf(config.getString("shape").toUpperCase());
-        col = Color.decode(config.getString("color"));
+        effect.shape = ParticleShape.valueOf(config.getString("shape").toUpperCase());
+        effect.col = Color.decode(config.getString("color"));
         double[] split = Stream.of(config.getString("direction").split(";")).mapToDouble(Double::parseDouble).toArray();
-        directionModifier = new Vector(split[0], split[1], split[2]);
-        speed = config.getDouble("speed");
-        amount = config.getInt("amount");
-        length = config.getDouble("length");
+        effect.directionModifier = new Vector(split[0], split[1], split[2]);
+        effect.speed = config.getDouble("speed");
+        effect.amount = config.getInt("amount");
+        effect.length = config.getDouble("length");
+
+        return effect;
     }
 
     public String dirToString() {
@@ -49,12 +50,14 @@ public class Effect {
     }
 
     public void start(Location location) {
-        particleLocation = location.clone();
         stop();
 
         if (effect.equals(EffectType.GUARDIAN)) {
             if (guardian == null) guardian = new NMSGuardian(location, length);
+            guardian.spawn();
             return;
+        } else {
+            particleLocation = location;
         }
 
         task = new BukkitRunnable() {

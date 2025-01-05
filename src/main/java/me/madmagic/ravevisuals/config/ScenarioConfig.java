@@ -1,8 +1,8 @@
 package me.madmagic.ravevisuals.config;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.handlers.scenarios.Scenario;
-import me.madmagic.ravevisuals.handlers.scenarios.ScenarioHandler;
+import me.madmagic.ravevisuals.config.scenario.Scenario;
+import me.madmagic.ravevisuals.handlers.sequences.ScenarioPlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -17,6 +17,6 @@ public class ScenarioConfig {
         } catch (Exception ignored) {}
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        config.getKeys(false).forEach(name -> ScenarioHandler.scenarios.put(name, new Scenario(config.getConfigurationSection(name))));
+        config.getKeys(false).forEach(name -> ScenarioPlayer.scenarios.put(name, new Scenario(config.getConfigurationSection(name))));
     }
 }

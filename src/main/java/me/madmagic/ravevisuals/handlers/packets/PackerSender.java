@@ -8,9 +8,10 @@ import com.comphenix.protocol.wrappers.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.Util;
-import me.madmagic.ravevisuals.base.NMSEntity;
+import me.madmagic.ravevisuals.ents.NMSEntity;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
@@ -21,7 +22,7 @@ import org.bukkit.util.Vector;
 import java.util.List;
 import java.util.UUID;
 
-public class LibHandler {
+public class PackerSender {
 
     public static void spawnEntity(NMSEntity<?, ?> entity, Player... player) {
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
@@ -39,7 +40,7 @@ public class LibHandler {
 
         packet.getBytes()
                 .write(0, (byte) (location.getPitch() * 256.0F / 360.0F))
-                .write(0, (byte) (location.getYaw() * 256.0F / 360.0F));
+                .write(1, (byte) (location.getYaw() * 256.0F / 360.0F));
 
         sendPacket(packet, player);
     }
@@ -49,7 +50,7 @@ public class LibHandler {
 
         packet.getModifier().write(0, new IntArrayList(new int[] { entity.entityId() }));
 
-        LibHandler.sendPacket(packet, player);
+        PackerSender.sendPacket(packet, player);
     }
 
     public static void moveEntity(NMSEntity<?, ?> entity, Player... player) {
@@ -66,8 +67,8 @@ public class LibHandler {
                 .write(1, new Vector(0, 0, 0));
 
         is.getFloat()
-                .write(0, location.getYaw())
-                .write(1, location.getYaw());
+                .write(0, location.getYaw());
+//                .write(1, location.getYaw());
 
         sendPacket(packet, player);
     }
@@ -82,7 +83,12 @@ public class LibHandler {
     }
 
     public static void syncMetaData(NMSEntity<?, ?> entity, Player... player) {
-        ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.entityId(), entity.getEntity().getEntityData().getNonDefaultValues());
+        sendCustomEntityData(entity, entity.getEntity().getEntityData().getNonDefaultValues(), player);
+
+    }
+
+    public static void sendCustomEntityData(NMSEntity<?, ?> entity, List<SynchedEntityData.DataValue<?>> data, Player... player) {
+        ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.entityId(), data);
         sendPacket(packet, player);
     }
 
