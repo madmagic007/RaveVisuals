@@ -1,6 +1,7 @@
-package me.madmagic.ravevisuals.handlers.sequences;
+package me.madmagic.ravevisuals.handlers.anim;
 
 import me.madmagic.ravevisuals.Util;
+import me.madmagic.ravevisuals.config.SceneConfig;
 import me.madmagic.ravevisuals.instances.scenes.Scene;
 import org.bukkit.command.CommandSender;
 
@@ -26,5 +27,10 @@ public class SceneHandler {
 
     public static void stopSceneFromCommand(CommandSender sender, String scenarioName) {
         Util.runIfNotNull(scenes.get(scenarioName), Scene::stop, () -> sender.sendMessage("Scenario not found"));
+    }
+
+    public static void reload() {
+        scenes.clear();
+        SceneConfig.init();
     }
 }

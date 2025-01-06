@@ -1,6 +1,6 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
-import me.madmagic.ravevisuals.handlers.sequences.SceneHandler;
+import me.madmagic.ravevisuals.handlers.anim.SceneHandler;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;

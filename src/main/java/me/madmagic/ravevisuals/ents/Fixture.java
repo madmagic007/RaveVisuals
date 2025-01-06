@@ -3,7 +3,7 @@ package me.madmagic.ravevisuals.ents;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import me.madmagic.ravevisuals.instances.Effect;
-import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
@@ -76,7 +76,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
     public Fixture syncAll(Player... player) {
         syncHelmet(player);
 
-        if (isOn && effect.effect.equals(Effect.BeamType.GUARDIAN)) {
+        if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) {
             effect.guardian.spawn(player);
         }
 
@@ -91,7 +91,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
         Location clone = getLocation().clone();
 
-        if (effect.effect.equals(Effect.BeamType.GUARDIAN)) effect.setGuardianTarget(clone.add(0, 1.2, 0));
+        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(clone.add(0, 1.2, 0));
         else effect.particleLocation = clone.add(0, 1.7, 0);
 
         return this;
@@ -99,7 +99,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
     @Override
     public Fixture syncHeadPose(Player... player) {
-        if (isOn && effect.effect.equals(Effect.BeamType.GUARDIAN)) effect.guardian.syncBeam(player);
+        if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.guardian.syncBeam(player);
         return super.syncHeadPose(player);
     }
 
@@ -108,7 +108,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
         return this;
     }
 
-    public void changeBeamTypeRunning(Effect.BeamType type) {
+    public void changeEffectTypeRunning(Effect.EffectType type) {
         if (effect.effect.equals(type)) return;
         if (isOn) effect.stop();
         effect.effect = type;

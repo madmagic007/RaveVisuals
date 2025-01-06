@@ -2,7 +2,7 @@ package me.madmagic.ravevisuals.config;
 
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.instances.scenes.Scene;
-import me.madmagic.ravevisuals.handlers.sequences.SceneHandler;
+import me.madmagic.ravevisuals.handlers.anim.SceneHandler;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

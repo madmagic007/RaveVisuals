@@ -51,8 +51,11 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
         }
 
         conf = completions.getConfigurationSection(path);
-        if (conf != null) return StringUtil.copyPartialMatches(args[lPos], conf.getKeys(false), completes);
-
+        if (conf != null) {
+            List<String> str = StringUtil.copyPartialMatches(args[lPos], conf.getKeys(false), completes);
+            str.add(args[lPos]);
+            return str;
+        }
 
         if ("/".equals(completions.getString(path)) || "//".equals(completions.getString(longestPath))) {
             StringUtil.copyPartialMatches(args[lPos], getCustomCompletion(path), completes);

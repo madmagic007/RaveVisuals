@@ -5,7 +5,9 @@ import me.madmagic.ravevisuals.config.GroupConfig;
 import me.madmagic.ravevisuals.ents.Fixture;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
+import me.madmagic.ravevisuals.handlers.anim.StateHandler;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ public class GroupSubCommand extends SubCommand {
             case "start", "stop" -> GroupHandler.toggleAllFromCommand(sender, args);
             case "startmotion" -> MotionHandler.startFromCommand(sender, args, true);
             case "stopmotion" -> MotionHandler.stopFromCommand(sender, args, true);
+            case "startsequence" -> SequenceHandler.startFromCommand(sender, args, true);
+            case "stopsequence" -> SequenceHandler.stopFromCommand(sender, args, true);
+            case "applystate" -> StateHandler.applyFromCommand(sender, args, true);
         }
 
         GroupConfig.save();
@@ -37,7 +42,8 @@ public class GroupSubCommand extends SubCommand {
         String[] split = path.split("\\.");
 
         if (path.startsWith("group.startmotion") && path.split("\\.").length == 3) return MotionHandler.getLoadedMotionNames();
-        if (path.startsWith("group.stopmotion") && path.split("\\.").length == 3) return MotionHandler.getLoadedMotionNames();
+        if (path.startsWith("group.startsequence") && path.split("\\.").length == 3) return SequenceHandler.getLoadedSequenceNames();
+        if (path.startsWith("group.applystate") && split.length == 3) return StateHandler.getLoadedStateNames();
         if (path.startsWith("group.addfixture") && path.split("\\.").length >= 3) return getAvailableFixtures(split);
         if (path.startsWith("group.create") && path.split("\\.").length >= 3) return getExistingNoDuplicates(split);
         if (path.startsWith("group.removefixture") && path.split("\\.").length >= 3) {
@@ -48,7 +54,7 @@ public class GroupSubCommand extends SubCommand {
             return names;
         }
 
-        if (split.length < 5) return GroupHandler.getLoadedGroupNames();
+        if (split.length < 4) return GroupHandler.getLoadedGroupNames();
         return super.getTabCompletions(path);
     }
 

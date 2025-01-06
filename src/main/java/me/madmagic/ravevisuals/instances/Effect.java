@@ -20,7 +20,7 @@ public class Effect {
     private BukkitTask task;
     public Location particleLocation;
 
-    public BeamType effect = BeamType.GUARDIAN;
+    public EffectType effect = EffectType.GUARDIAN;
     public Particle particle = Particle.DUST;
     public ParticleShape shape = ParticleShape.LINE;
     public Color col = Color.fromRGB(0x0071fd);
@@ -32,7 +32,7 @@ public class Effect {
     public NMSGuardian guardian;
     public static Effect fromConfig(ConfigurationSection config) {
         Effect effect = new Effect();
-        effect.effect = BeamType.valueOf(config.getString("effect", "guardian").toUpperCase());
+        effect.effect = EffectType.valueOf(config.getString("effect", "guardian").toUpperCase());
 
         config = config.getConfigurationSection("particle");
 
@@ -57,7 +57,7 @@ public class Effect {
     public void start(Location location) {
         stop();
 
-        if (effect.equals(BeamType.GUARDIAN)) {
+        if (effect.equals(EffectType.GUARDIAN)) {
             if (guardian == null) guardian = new NMSGuardian(location, length);
             guardian.spawn();
             return;
@@ -139,7 +139,7 @@ public class Effect {
         if (guardian != null) guardian.updateBeam(location, length);
     }
 
-    public enum BeamType {
+    public enum EffectType {
         GUARDIAN,
         PARTICLE
     }

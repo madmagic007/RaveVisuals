@@ -1,4 +1,4 @@
-package me.madmagic.ravevisuals.handlers.sequences;
+package me.madmagic.ravevisuals.handlers.anim;
 
 import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.config.MotionConfig;
@@ -21,6 +21,10 @@ public class MotionHandler {
 
     public static void add(String name, Motion motion) {
         motions.put(name, motion);
+    }
+
+    public static Motion getByName(String name) {
+        return motions.get(name);
     }
 
     public static List<String> getLoadedMotionNames() {
@@ -56,9 +60,9 @@ public class MotionHandler {
 
     public static void startMotion(Fixture fixture, Motion motion) {
         if (motion.motions.isEmpty()) return;
-        fixture.turnOn();
 
-        Util.runIfNotNull(activeMotions.get(fixture), MotionInstance::stop);
+        stopMotion(fixture);
+        fixture.turnOn();
 
         MotionInstance motionInstance = new MotionInstance(fixture, motion);
 
@@ -80,6 +84,7 @@ public class MotionHandler {
     }
 
     public static void reload() {
+        motions.clear();
         MotionConfig.init();
     }
 }

@@ -4,7 +4,7 @@ import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.ents.Fixture;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.sequences.StateHandler;
+import me.madmagic.ravevisuals.handlers.anim.StateHandler;
 import me.madmagic.ravevisuals.instances.State;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -22,7 +22,7 @@ public class ScenePart {
         afterDelay = config.getInt("delay");
         config.set("delay", null); //remove key, so iteration below doesn't try to find fixture/group with name "delay"
 
-        config.getKeys(false).forEach(key -> {
+        config.getKeys(false).forEach(key -> { //key is fixture or group name
             ConfigurationSection stateConfig = config.getConfigurationSection(key);
             State state;
 

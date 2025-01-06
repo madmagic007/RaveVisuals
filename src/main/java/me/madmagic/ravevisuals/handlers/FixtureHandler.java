@@ -3,6 +3,8 @@ package me.madmagic.ravevisuals.handlers;
 import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.config.FixtureConfig;
 import me.madmagic.ravevisuals.ents.Fixture;
+import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -75,7 +77,11 @@ public class FixtureHandler {
 
     public static void toggle(Fixture fixture, boolean turnOn) {
         if (turnOn) fixture.turnOn();
-        else fixture.turnOff();
+        else { //disable sequences and motion
+            fixture.turnOff();
+            MotionHandler.stopMotion(fixture);
+            SequenceHandler.stopSequence(fixture);
+        }
     }
 
     public static void forEach(Consumer<Fixture> consumer) {

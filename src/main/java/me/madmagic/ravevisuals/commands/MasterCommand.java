@@ -5,8 +5,11 @@ import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.SceneSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.SubCommand;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.anim.SceneHandler;
+import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
+import me.madmagic.ravevisuals.handlers.anim.StateHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -32,6 +35,10 @@ public class MasterCommand extends CommandBase {
             FixtureHandler.reload();
             GroupHandler.reload();
             MotionHandler.reload();
+            StateHandler.reload();
+            SequenceHandler.reload();
+            SceneHandler.reload();
+
             sender.sendMessage("Reloaded RaveVisuals");
             return true;
         }
@@ -54,7 +61,10 @@ public class MasterCommand extends CommandBase {
 
         List<String> completion = new ArrayList<>();
         subCommands.forEach(subCommand -> {
-            if (subCommand.name.equals(subName)) completion.addAll(subCommand.getTabCompletions(path.replaceFirst("rv\\.", "")));
+            if (subCommand.name.equals(subName)){
+                List<String> completions = subCommand.getTabCompletions(path.replaceFirst("rv\\.", ""));
+                completion.addAll(completions);
+            }
         });
 
         return completion;

@@ -39,7 +39,7 @@ public class Scene {
             curPos = 0;
             curRepetition++;
 
-            if (curRepetition >= repetitions) return null;
+            if (curRepetition >= repetitions && repetitions != 0) return null;
         }
 
         return scenePart;
@@ -54,8 +54,10 @@ public class Scene {
     public void startTask() {
         ScenePart scenePart = getNextScenePart();
 
-        if (!run || scenePart == null)
-            stop();;
+        if (!run || scenePart == null) {
+            stop();
+            return;
+        }
 
         sceneTask = new BukkitRunnable() {
             @Override
