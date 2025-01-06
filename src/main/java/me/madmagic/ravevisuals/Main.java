@@ -3,10 +3,10 @@ package me.madmagic.ravevisuals;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.madmagic.ravevisuals.commands.CommandBase;
-import me.madmagic.ravevisuals.config.fixture.FixtureConfig;
+import me.madmagic.ravevisuals.config.FixtureConfig;
 import me.madmagic.ravevisuals.config.GroupConfig;
-import me.madmagic.ravevisuals.config.motion.MotionConfig;
-import me.madmagic.ravevisuals.config.ScenarioConfig;
+import me.madmagic.ravevisuals.config.MotionConfig;
+import me.madmagic.ravevisuals.config.SceneConfig;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.packets.PacketListener;
 import org.bukkit.ChatColor;
@@ -33,7 +33,7 @@ public final class Main extends JavaPlugin {
         FixtureConfig.init();
         GroupConfig.init();
         MotionConfig.init();
-        ScenarioConfig.init();
+        SceneConfig.init();
 
         PacketListener.init();
 

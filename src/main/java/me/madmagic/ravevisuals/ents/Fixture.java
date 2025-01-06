@@ -2,8 +2,8 @@ package me.madmagic.ravevisuals.ents;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import me.madmagic.ravevisuals.config.fixture.Effect;
-import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.instances.Effect;
+import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
@@ -21,7 +21,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
     public String name;
     public boolean isOn = false;
-    public boolean showHead = true;
+    public boolean showHead = false;
     public Effect effect = new Effect();
     public final float restPitch;
     public final float restYaw;
@@ -34,15 +34,18 @@ public class Fixture extends NMSArmorStand<Fixture> {
         restPitch = location.getPitch();
         restYaw = location.getYaw();
 
-        setHeadTexture(HeadTexture.SPOT_OFF).getEntity().setCustomName(Component.literal(name));
+        getEntity().setCustomName(Component.literal(name));
+
+        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
     }
 
     public Fixture(Location location, String name, ConfigurationSection config) {
         this(location, name);
 
-        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
-
+        showHead = config.getBoolean("head");
         effect = Effect.fromConfig(config);
+
+        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
     }
 
     public void turnOn(Player... player) {
@@ -50,7 +53,11 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
         if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).syncHelmet(player);
 
-        effect.start(getLocation().clone().add(0, 1.7, 0));
+        Location clone = getLocation().clone();
+        Vec3 eyePos = getEntity().getEyePosition();
+        clone.add(eyePos.x, eyePos.y, eyePos.z);
+
+        effect.start(clone);
     }
 
     public Fixture turnOff(Player... player) {
@@ -58,7 +65,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
         effect.stop();
-        MotionPlayer.stopMotion(this);
+        MotionHandler.stopMotion(this);
 
         setHeadPose(restYaw, restPitch).syncHeadPose(player);
 
@@ -67,9 +74,9 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
     @Override
     public Fixture syncAll(Player... player) {
-        if (showHead) syncHelmet(player);
+        syncHelmet(player);
 
-        if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) {
+        if (isOn && effect.effect.equals(Effect.BeamType.GUARDIAN)) {
             effect.guardian.spawn(player);
         }
 
@@ -84,7 +91,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
         Location clone = getLocation().clone();
 
-        if (effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.setGuardianTarget(clone.add(0, 1.2, 0));
+        if (effect.effect.equals(Effect.BeamType.GUARDIAN)) effect.setGuardianTarget(clone.add(0, 1.2, 0));
         else effect.particleLocation = clone.add(0, 1.7, 0);
 
         return this;
@@ -92,7 +99,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
     @Override
     public Fixture syncHeadPose(Player... player) {
-        if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) effect.guardian.syncBeam(player);
+        if (isOn && effect.effect.equals(Effect.BeamType.GUARDIAN)) effect.guardian.syncBeam(player);
         return super.syncHeadPose(player);
     }
 
@@ -101,7 +108,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
         return this;
     }
 
-    public void changeBeamTypeRunning(Effect.EffectType type) {
+    public void changeBeamTypeRunning(Effect.BeamType type) {
         if (effect.effect.equals(type)) return;
         if (isOn) effect.stop();
         effect.effect = type;
@@ -133,5 +140,22 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
             return playerHead;
         }
+    }
+
+    public void saveToConfig(ConfigurationSection section) {
+        section.set("location", getLocation());
+
+        section.set("effect", effect.effect.name().toLowerCase());
+        section.set("head", showHead);
+
+        ConfigurationSection particleSection = section.createSection("particle");
+
+        particleSection.set("particle", effect.particle.name().toLowerCase());
+        particleSection.set("shape", effect.shape.toString().toLowerCase());
+        particleSection.set("color", String.format("#%06X", (0xFFFFFF & effect.col.asRGB())));
+        particleSection.set("direction", effect.dirToString());
+        particleSection.set("speed", effect.speed);
+        particleSection.set("amount", effect.amount);
+        particleSection.set("length", effect.length);
     }
 }

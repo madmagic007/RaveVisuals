@@ -1,7 +1,7 @@
 package me.madmagic.ravevisuals.commands.subcommands;
 
 import me.madmagic.ravevisuals.handlers.EditorHandler;
-import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,9 +27,9 @@ public class FixtureSubCommand extends SubCommand {
                     else
                         EditorHandler.startEditMode(player);
                 }
-                case "start", "stop" -> FixtureHandler.turnOn(args[1]);
-                case "startmotion" -> MotionPlayer.startFromCommand(sender, args, false);
-                case "stopmotion" -> MotionPlayer.stopFromCommand(sender, args, false);
+                case "start", "stop" -> FixtureHandler.toggleFromCommand(sender, args);
+                case "startmotion" -> MotionHandler.startFromCommand(sender, args, false);
+                case "stopmotion" -> MotionHandler.stopFromCommand(sender, args, false);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,8 +40,8 @@ public class FixtureSubCommand extends SubCommand {
     public List<String> getTabCompletions(String path) {
         String[] split = path.split("\\.");
 
-        if (path.startsWith("fixture.startmotion") && split.length == 3) return MotionPlayer.motions.keySet().stream().toList();
-        if (split.length < 4) return FixtureHandler.activeFixtures.keySet().stream().toList();
+        if (path.startsWith("fixture.startmotion") && split.length == 3) return MotionHandler.getLoadedMotionNames();
+        if (split.length < 4) return FixtureHandler.getLoadedFixtureNames();
 
         return super.getTabCompletions(path);
     }

@@ -51,10 +51,6 @@ public class NMSArmorStand<T extends NMSArmorStand<?>> extends NMSEntity<T, Armo
         List<SynchedEntityData.DataValue<?>> cloned = new ArrayList<>();
 
         for (SynchedEntityData.DataItem<?> dataItem : getDataItems()) {
-            if (dataItem.getAccessor().equals(headPoseAccessor)) {
-                System.out.println();
-            }
-
             if (!dataItem.isSetToDefault() || dataItem.getAccessor().equals(headPoseAccessor))
                 cloned.add(dataItem.value());
         }

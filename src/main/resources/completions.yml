@@ -19,6 +19,8 @@ rv:
     startmotion: //
     stopmotion: /
 
-  scenario: /
+  scene:
+    start: /
+    stop: /
 
   reload: ""

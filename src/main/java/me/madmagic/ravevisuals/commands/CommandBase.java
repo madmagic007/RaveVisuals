@@ -17,6 +17,7 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
 
     protected static YamlConfiguration completions = new YamlConfiguration();
     private final String name;
+
     public CommandBase(String name) {
         this.name = name;
         PluginCommand c = Main.instance.getCommand(name);
@@ -27,7 +28,7 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
     public static void init() {
         try (InputStream in = CommandBase.class.getResourceAsStream("/completions.yml");
              Reader reader = new InputStreamReader(in)) {
-            completions.load((reader));
+            completions.load(reader);
         } catch (Exception e) {
             e.printStackTrace();
         }

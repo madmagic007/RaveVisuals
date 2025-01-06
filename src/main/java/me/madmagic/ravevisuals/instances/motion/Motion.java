@@ -1,19 +1,27 @@
-public static class Motion {
+package me.madmagic.ravevisuals.instances.motion;
 
-        public final String name;
-        public final int delay;
-        public final boolean relative;
-        public final List<Vector> motions;
+import me.madmagic.ravevisuals.handlers.PositioningHelper;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.util.Vector;
 
-        public Motion(ConfigurationSection config, String name) {
-            this.name = name;
-            delay = config.getInt("delay");
-            relative = config.getBoolean("relative");
+import java.util.ArrayList;
+import java.util.List;
 
-            motions = new ArrayList<>();
-            config.getStringList("motion").forEach(s -> {
-                double[] split = Stream.of(s.split(" ")).mapToDouble(Double::parseDouble).toArray();
-                motions.add(new Vector(PositioningHelper.fixRotation((float) split[0]), 0, PositioningHelper.fixRotation((float) split[1])));
-            });
-        }
+public class Motion {
+
+    public final String name;
+    public final int delay;
+    public final boolean relative;
+    public final List<Vector> motions;
+
+    public Motion(ConfigurationSection config, String name) {
+        this.name = name;
+        delay = config.getInt("delay");
+        relative = config.getBoolean("relative");
+
+        motions = new ArrayList<>();
+        config.getStringList("motion").forEach(s ->
+            motions.add(PositioningHelper.vecStringToVector(s))
+        );
     }
+}

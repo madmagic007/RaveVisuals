@@ -1,18 +1,29 @@
 package me.madmagic.ravevisuals.handlers;
 
 import me.madmagic.ravevisuals.Util;
+import me.madmagic.ravevisuals.config.FixtureConfig;
 import me.madmagic.ravevisuals.ents.Fixture;
-import me.madmagic.ravevisuals.config.fixture.FixtureConfig;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class FixtureHandler {
 
-    public static HashMap<String, Fixture> activeFixtures = new HashMap<>();
+    private static HashMap<String, Fixture> activeFixtures = new HashMap<>();
+
+    public static Fixture getByName(String name) {
+        return activeFixtures.get(name);
+    }
+
+    public static List<String> getLoadedFixtureNames() {
+        return activeFixtures.keySet().stream().toList();
+    }
 
     public static void createFromCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
@@ -60,8 +71,6 @@ public class FixtureHandler {
 
     public static void toggleFromCommand(CommandSender sender, String[] args) {
         Util.runIfNotNull(activeFixtures.get(args[1]), f -> toggle(f, args[0].equals("start")), () -> sender.sendMessage("Fixture not found"));
-
-        
     }
 
     public static void toggle(Fixture fixture, boolean turnOn) {
@@ -69,9 +78,13 @@ public class FixtureHandler {
         else fixture.turnOff();
     }
 
+    public static void forEach(Consumer<Fixture> consumer) {
+        activeFixtures.values().forEach(consumer);
+    }
+
     public static void save(CommandSender sender) {
         if (sender instanceof Player player) EditorHandler.stopEditMode(player);
-        FixtureConfig.saveAll();
+        FixtureConfig.save();
         reload();
         GroupHandler.reload(); //in case fixture got removed
     }
@@ -87,5 +100,16 @@ public class FixtureHandler {
     public static void reload() {
         FixtureHandler.despawnAll();
         FixtureConfig.init();
+    }
+
+    public static YamlConfiguration createConfig() {
+        YamlConfiguration conf = new YamlConfiguration();
+
+        activeFixtures.forEach((name, fixture) -> {
+            ConfigurationSection section = conf.createSection(name);
+            fixture.saveToConfig(section);
+        });
+
+        return conf;
     }
 }

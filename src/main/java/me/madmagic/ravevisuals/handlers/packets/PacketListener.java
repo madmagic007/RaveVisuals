@@ -15,7 +15,7 @@ public class PacketListener {
             public void onPacketReceiving(PacketEvent event) {
                 int entId = event.getPacket().getIntegers().read(0);
 
-                FixtureHandler.activeFixtures.forEach((s, f) -> {
+                FixtureHandler.forEach(f -> {
                     if (f.entityId() == entId) EditorHandler.editFixture(event.getPlayer(), f);
                 });
             }

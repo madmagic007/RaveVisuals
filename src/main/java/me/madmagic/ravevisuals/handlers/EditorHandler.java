@@ -15,7 +15,7 @@ public class EditorHandler {
         if (editingPlayers.containsKey(player.getUniqueId())) return;
         editingPlayers.put(player.getUniqueId(), new EditingPlayer(null));
 
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setCustomNameVisible(true, player));
+        FixtureHandler.forEach(f -> f.setCustomNameVisible(true, player));
 
         startTimer();
     }
@@ -28,7 +28,7 @@ public class EditorHandler {
         editingPlayers.remove(player.getUniqueId());
         if (editingPlayers.isEmpty()) stopTimer();
 
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setCustomNameVisible(false, player));
+        FixtureHandler.forEach(f -> f.setCustomNameVisible(false, player));
     }
 
     public static void editFixture(Player player, Fixture fixture) {

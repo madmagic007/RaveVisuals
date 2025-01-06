@@ -12,7 +12,7 @@ public class EventListener implements Listener {
     public void event(PlayerJoinEvent event) {
         new Thread(() -> {
             Player player = event.getPlayer();
-            FixtureHandler.activeFixtures.forEach((s, f) -> f.spawn(player).syncAll(player));
+            FixtureHandler.forEach(f -> f.spawn(player).syncAll(player));
         }).start();
     }
 }

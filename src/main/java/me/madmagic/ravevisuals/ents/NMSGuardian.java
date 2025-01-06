@@ -15,7 +15,7 @@ public class NMSGuardian extends NMSEntity<NMSGuardian, Guardian> {
     protected NMSArmorStand target;
 
     public NMSGuardian(Location location, double beamLength) {
-        super(Guardian.class, EntityType.GUARDIAN, location.subtract(0, 0.5, 0));
+        super(Guardian.class, EntityType.GUARDIAN, location.subtract(0, 0.47, 0));
 
         target = new NMSArmorStand(calcTargetLocation(location, beamLength));
     }
@@ -23,16 +23,19 @@ public class NMSGuardian extends NMSEntity<NMSGuardian, Guardian> {
     private Location calcTargetLocation(Location location, double beamLength) {
         Location targetLoc = location.clone();
         Vector dir = targetLoc.getDirection().multiply(beamLength);
-        return targetLoc.add(dir).subtract(0, 0.5, 0);
+        return targetLoc.add(dir).subtract(0, 0.58, 0);
     }
 
-    public NMSGuardian moveBeam(Location location, double beamLength) {
+    public NMSGuardian updateBeam(Location location, double beamLength) {
         target.setLocation(calcTargetLocation(location, beamLength));
+        setLocation(location);
+
         return this;
     }
 
     public NMSGuardian syncBeam(Player... player) {
         target.syncLocation(player);
+        syncLocation(player);
         return this;
     }
 

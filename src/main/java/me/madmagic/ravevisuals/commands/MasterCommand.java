@@ -2,10 +2,10 @@ package me.madmagic.ravevisuals.commands;
 
 import me.madmagic.ravevisuals.commands.subcommands.FixtureSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
-import me.madmagic.ravevisuals.commands.subcommands.ScenarioSubCommand;
+import me.madmagic.ravevisuals.commands.subcommands.SceneSubCommand;
 import me.madmagic.ravevisuals.commands.subcommands.SubCommand;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.sequences.MotionPlayer;
+import me.madmagic.ravevisuals.handlers.sequences.MotionHandler;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,7 +31,7 @@ public class MasterCommand extends CommandBase {
         if (subName.equals("reload")) {
             FixtureHandler.reload();
             GroupHandler.reload();
-            MotionPlayer.reload();
+            MotionHandler.reload();
             sender.sendMessage("Reloaded RaveVisuals");
             return true;
         }
@@ -61,6 +61,6 @@ public class MasterCommand extends CommandBase {
     }
 
     private final List<SubCommand> subCommands = Arrays.asList(
-            new FixtureSubCommand(), new GroupSubCommand(), new ScenarioSubCommand()
+            new FixtureSubCommand(), new GroupSubCommand(), new SceneSubCommand()
     );
 }

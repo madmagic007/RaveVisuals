@@ -20,27 +20,21 @@ public class GroupConfig {
         try {
             file.createNewFile();
         } catch (Exception ignored) {}
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         config.getKeys(false).forEach(gName -> {
             List<Fixture> fList = new ArrayList<>();
 
-            config.getStringList(gName).forEach(fName -> Util.runIfNotNull(FixtureHandler.activeFixtures.get(fName), fList::add));
-            GroupHandler.groups.put(gName, fList);
+            config.getStringList(gName).forEach(fName -> Util.runIfNotNull(FixtureHandler.getByName(fName), fList::add));
+
+            GroupHandler.add(gName, fList);
         });
         save();
     }
 
     public static void save() {
-        YamlConfiguration config = new YamlConfiguration();
-        GroupHandler.groups.forEach((s, l) -> {
-            List<String> names = new ArrayList<>();
-            l.forEach(f -> names.add(f.name));
-            config.set(s, names);
-        });
-
         try {
-            config.save(file);
+            GroupHandler.createConfig().save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
