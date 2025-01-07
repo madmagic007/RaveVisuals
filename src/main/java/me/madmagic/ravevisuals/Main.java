@@ -2,12 +2,14 @@ package me.madmagic.ravevisuals;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import me.madmagic.ravevisuals.api.ApiServerHandler;
 import me.madmagic.ravevisuals.commands.CommandBase;
 import me.madmagic.ravevisuals.config.*;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.packets.PacketListener;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
@@ -15,6 +17,7 @@ public final class Main extends JavaPlugin {
     public static ConsoleCommandSender console;
     public static JavaPlugin instance;
     public static ProtocolManager pm;
+    public static FileConfiguration pluginConfig;
 
     @Override
     public void onEnable() {
@@ -23,6 +26,8 @@ public final class Main extends JavaPlugin {
         console.sendMessage(ChatColor.BLUE + "Loading RaveVisuals...");
         pm = ProtocolLibrary.getProtocolManager();
         instance = this;
+        saveDefaultConfig();
+        pluginConfig = getConfig();
 
         getServer().getPluginManager().registerEvents(new EventListener(), this);
 
@@ -36,6 +41,8 @@ public final class Main extends JavaPlugin {
 
         PacketListener.init();
 
+        ApiServerHandler.init();
+
         console.sendMessage(ChatColor.BLUE + "Finished loading RaveVisuals. Took " + (System.currentTimeMillis() - timeNow) + "ms.");
     }
 
@@ -43,5 +50,6 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Shutting RaveVisuals down");
         FixtureHandler.despawnAll();
+        ApiServerHandler.stop();
     }
 }

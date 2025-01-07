@@ -60,7 +60,7 @@ public class SequenceHandler {
     public static void startSequence(Fixture fixture, Sequence sequence) {
         if (sequence.sequenceParts.isEmpty()) return;
 
-        stopSequence(fixture);
+        stopSequence(fixture, false);
 
         SequenceInstance sequenceInstance = new SequenceInstance(fixture, sequence);
         sequenceInstance.applyInitialStateToIfDefined(fixture);
@@ -70,8 +70,16 @@ public class SequenceHandler {
     }
 
     public static void stopSequence(Fixture fixture) {
+        stopSequence(fixture, true);
+    }
+
+    public static void stopSequence(Fixture fixture, boolean applyFinal) {
         Util.runIfNotNull(activeSequences.get(fixture), s -> {
             s.stop();
+
+            if (applyFinal)
+                s.applyFinalStateToIfDefined(fixture);
+
             activeSequences.remove(fixture);
         });
     }

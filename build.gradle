@@ -21,8 +21,11 @@ dependencies {
     compileOnly 'org.spigotmc:spigot:1.21.3-R0.1-SNAPSHOT:remapped-mojang'
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
     compileOnly files("libs/ProtocolLib.jar")
-    //compileOnly 'com.comphenix.protocol:ProtocolLib:5.4.0'
-    //implementation 'hm.zelha:particlesfx:1.21'
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+
+    implementation 'org.json:json:20241224'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
 
 jar {

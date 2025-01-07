@@ -1,0 +1,5 @@
+api:
+    enabled: false
+    port: 16522
+    useAuthentication: false
+    authenticationToken: ""

@@ -13,6 +13,7 @@ public class Sequence {
 
     public List<SequencePart> sequenceParts = new ArrayList<>();
     private State initialState;
+    private State finalState;
     public int repetitions;
 
     public Sequence(ConfigurationSection config) {
@@ -20,12 +21,20 @@ public class Sequence {
 
         repetitions = config.getInt("repetitions");
 
-        ConfigurationSection initialStateConfig = config.getConfigurationSection("initialState");
+        ConfigurationSection initialStateConfig = config.getConfigurationSection("initial");
         Util.runIfNotNull(initialStateConfig, stateConfig -> {
             if (stateConfig.contains("state"))
                 initialState = StateHandler.getByName(config.getString("state"));
             else
                 initialState = new State(stateConfig);
+        });
+
+        ConfigurationSection finalStateConfig = config.getConfigurationSection("final");
+        Util.runIfNotNull(finalStateConfig, stateConfig -> {
+            if (stateConfig.contains("state"))
+                finalState = StateHandler.getByName(config.getString("state"));
+            else
+                finalState = new State(stateConfig);
         });
 
         ConfigurationSection sequenceConfig = config.getConfigurationSection("sequence");
@@ -40,5 +49,11 @@ public class Sequence {
         if (initialState == null) return;
 
         initialState.applyTo(fixture);
+    }
+
+    public void applyFinalStateToIfDefined(Fixture fixture) {
+        if (finalState == null) return;
+
+        finalState.applyTo(fixture);
     }
 }

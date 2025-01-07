@@ -30,3 +30,5 @@ rv:
     stop: /
 
   reload: ""
+
+  generateNewAuthenticationToken: ""

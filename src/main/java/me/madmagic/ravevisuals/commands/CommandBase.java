@@ -38,6 +38,11 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+//        List<String> completions = Arrays.asList(
+//                "start", "stop", "startmotion", "stopmotion"
+//        );
+//
+//        return completions.stream().filter(completion -> completion.toLowerCase().contains(args[args.length-1].toLowerCase())).toList();
         List<String> completes = new ArrayList<>();
         int lPos = args.length -1;
         String path = name;

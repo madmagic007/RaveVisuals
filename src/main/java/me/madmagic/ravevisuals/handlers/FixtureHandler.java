@@ -80,7 +80,7 @@ public class FixtureHandler {
         else { //disable sequences and motion
             fixture.turnOff();
             MotionHandler.stopMotion(fixture);
-            SequenceHandler.stopSequence(fixture);
+            SequenceHandler.stopSequence(fixture, true);
         }
     }
 

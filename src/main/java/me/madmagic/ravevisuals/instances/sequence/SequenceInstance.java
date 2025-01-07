@@ -62,4 +62,8 @@ public class SequenceInstance {
     public void applyInitialStateToIfDefined(Fixture fixture) {
         sequence.applyInitialStateToIfDefined(fixture);
     }
+
+    public void applyFinalStateToIfDefined(Fixture fixture) {
+        sequence.applyFinalStateToIfDefined(fixture);
+    }
 }

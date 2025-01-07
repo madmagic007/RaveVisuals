@@ -11,6 +11,7 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
+import org.json.JSONObject;
 
 public class State {
 
@@ -30,9 +31,9 @@ public class State {
             enable = config.getBoolean("enable");
 
         Util.runIfNotNull(config.getString("effect"), effectTypeName ->
-            Util.runIfNotNull(EffectType.valueOf(effectTypeName.toUpperCase()), effectType ->
-                this.effectType = effectType
-            )
+                Util.runIfNotNull(EffectType.valueOf(effectTypeName.toUpperCase()), effectType ->
+                        this.effectType = effectType
+                )
         );
 
         Util.runIfNotNull(config.getString("particle"), particleName ->
@@ -50,18 +51,62 @@ public class State {
         Util.runIfNotNull(config.getString("color"), color -> {
             try {
                 this.color = Util.hexToColor(color);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {            }
         });
 
-        Util.runIfNotNull(config.getString("motionName"), motionName ->
+        Util.runIfNotNull(config.getString("motion"), motionName ->
                 Util.runIfNotNull(MotionHandler.getByName(motionName), motion ->
-                    this.motion = motion
+                        this.motion = motion
                 )
         );
 
         Util.runIfNotNull(config.getString("rotation"), rotationStr ->
-            rotation = PositioningHelper.vecStringToVector(rotationStr)
+                rotation = PositioningHelper.vecStringToVector(rotationStr)
         );
+
+        sequenceName = config.getString("sequence");
+    }
+
+    public State(JSONObject o) {
+        Util.runIfNotNull(o.opt("enable"), enable ->
+                this.enable = (Boolean) enable
+        );
+
+        Util.runIfNotNull(o.optString("effect", null), effectTypeName ->
+                Util.runIfNotNull(EffectType.valueOf(effectTypeName.toUpperCase()), effectType ->
+                        this.effectType = effectType
+                )
+        );
+
+        Util.runIfNotNull(o.optString("particle", null), particleName ->
+                Util.runIfNotNull(Particle.valueOf(particleName.toUpperCase()), particle ->
+                        this.particle = particle
+                )
+        );
+
+        Util.runIfNotNull(o.optString("shape", null), shapeName ->
+                Util.runIfNotNull(Effect.ParticleShape.valueOf(shapeName.toUpperCase()), shape ->
+                        this.shape = shape
+                )
+        );
+
+        Util.runIfNotNull(o.optString("color", null), color -> {
+            try {
+                this.color = Util.hexToColor(color);
+            } catch (Exception ignored) {}
+        });
+
+        Util.runIfNotNull(o.optString("motion", null), motionName ->
+                Util.runIfNotNull(MotionHandler.getByName(motionName), motion ->
+                        this.motion = motion
+                )
+        );
+
+        Util.runIfNotNull(o.optString("rotation", null), rotationStr ->
+                rotation = PositioningHelper.vecStringToVector(rotationStr)
+        );
+
+        sequenceName = o.optString("sequence", null);
     }
 
     public void applyTo(Fixture fixture) {
