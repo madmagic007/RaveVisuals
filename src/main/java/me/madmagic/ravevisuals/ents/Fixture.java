@@ -65,7 +65,9 @@ public class Fixture extends NMSArmorStand<Fixture> {
 
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
         effect.stop();
+        
         MotionHandler.stopMotion(this);
+        SequenceHandler.stopSequence(this);
 
         if (resetHead) setHeadPose(restYaw, restPitch).syncHeadPose(player);
 
@@ -117,8 +119,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
         if (isOn) effect.stop();
         effect.effect = type;
 
-        Vec3 loc = getEntity().getEyePosition();
-        if (isOn) effect.start(getLocation().clone().set(loc.x, loc.y, loc.z));
+        if (isOn) turnOn();
     }
 
     public enum HeadTexture {

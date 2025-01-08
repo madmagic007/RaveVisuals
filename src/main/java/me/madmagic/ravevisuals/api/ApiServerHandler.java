@@ -26,9 +26,9 @@ public class ApiServerHandler {
         try {
             server = new Server(port);
 
-            server.setCheckAuth(config.getBoolean("useAuthentication"));
+            server.setCheckAuth(config.getBoolean("useAuthorization"));
 
-            Util.runIfNotNull(config.getString("authenticationToken"), token -> {
+            Util.runIfNotNull(config.getString("authorizationToken"), token -> {
                 if (token.isEmpty()) return;
                 server.setAuthToken(token);
             });
