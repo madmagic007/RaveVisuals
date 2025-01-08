@@ -2,6 +2,7 @@ package me.madmagic.ravevisuals.commands;
 
 import me.madmagic.ravevisuals.api.ApiServerHandler;
 import me.madmagic.ravevisuals.commands.subcommands.*;
+import me.madmagic.ravevisuals.handlers.EditorHandler;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
 import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
@@ -37,6 +38,7 @@ public class MasterCommand extends CommandBase {
             SequenceHandler.reload();
             SceneHandler.reload();
             ApiServerHandler.init();
+            EditorHandler.reload();
 
             sender.sendMessage("Reloaded RaveVisuals");
             return true;

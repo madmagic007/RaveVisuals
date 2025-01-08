@@ -43,6 +43,17 @@ public class EditorHandler {
         ep.startEditingFixture(fixture);
     }
 
+    public static void reload() {
+        editingPlayers.forEach((uuid, ep) -> {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p == null || !p.isOnline())
+                return;
+
+            FixtureHandler.forEach(f -> f.setCustomNameVisible(true, p));
+        });
+    }
+
+
     private static Timer editTimer;
     private static void startTimer() {
         stopTimer();

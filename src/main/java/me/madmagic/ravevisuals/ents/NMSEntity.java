@@ -72,7 +72,7 @@ public abstract class NMSEntity<T extends NMSEntity<?, ?>, E extends Entity> {
         List<SynchedEntityData.DataValue<?>> cloned = new ArrayList<>();
 
         for (SynchedEntityData.DataItem<?> dataItem : getDataItems()) {
-            if (!dataItem.isSetToDefault() && dataItem.getAccessor().equals(nameVisAccessor))
+            if (dataItem.getAccessor().equals(nameVisAccessor) && ((boolean) dataItem.getValue()) != visible)
                 cloned.add(SynchedEntityData.DataValue.create(nameVisAccessor, visible));
         }
 

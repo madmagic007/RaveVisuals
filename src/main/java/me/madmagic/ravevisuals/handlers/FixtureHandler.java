@@ -40,7 +40,7 @@ public class FixtureHandler {
         }
 
         Location loc = PositioningHelper.inFrontOfLookAt(player, 2).subtract(0, 1.7, 0);
-        Fixture f = new Fixture(loc, name);
+        Fixture f = new Fixture(loc, name, true);
         f.spawn().syncAll().setCustomNameVisible(true, player);
 
         activeFixtures.put(name, f);

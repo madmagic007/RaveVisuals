@@ -16,7 +16,9 @@ public class Main {
 
         JSONObject post = new JSONObject()
                 .put("fixtureNames", names)
-                .put("state", "bluedustbeam");
+                .put("state", new JSONObject()
+                        .put("motion", "square")
+                );
 
         RequestBody rb = RequestBody.create(post.toString(), MediaType.parse("application/json"));
 

@@ -28,12 +28,13 @@ public class Fixture extends NMSArmorStand<Fixture> {
     public final float restYaw;
 
 
-    public Fixture(Location location, String name) {
+    public Fixture(Location location, String name, boolean showHead) {
         super(location);
 
         this.name = name;
         restPitch = location.getPitch();
         restYaw = location.getYaw();
+        this.showHead = showHead;
 
         getEntity().setCustomName(Component.literal(name));
 
@@ -41,12 +42,9 @@ public class Fixture extends NMSArmorStand<Fixture> {
     }
 
     public Fixture(Location location, String name, ConfigurationSection config) {
-        this(location, name);
+        this(location, name, config.getBoolean("head"));
 
-        showHead = config.getBoolean("head");
         effect = Effect.fromConfig(config);
-
-        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
     }
 
     public void turnOn(Player... player) {
