@@ -31,4 +31,4 @@ rv:
 
   reload: ""
 
-  generateNewAuthenticationToken: ""
+  generateNewAuthorizationToken: ""
