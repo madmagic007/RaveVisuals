@@ -2,8 +2,9 @@ package me.madmagic.ravevisuals.ents;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import me.madmagic.ravevisuals.instances.Effect;
 import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
+import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
+import me.madmagic.ravevisuals.instances.Effect;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
