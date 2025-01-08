@@ -60,16 +60,20 @@ public class Fixture extends NMSArmorStand<Fixture> {
         effect.start(clone);
     }
 
-    public Fixture turnOff(Player... player) {
+    public Fixture turnOff(boolean resetHead, Player... player) {
         isOn = false;
 
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
         effect.stop();
         MotionHandler.stopMotion(this);
 
-        setHeadPose(restYaw, restPitch).syncHeadPose(player);
+        if (resetHead) setHeadPose(restYaw, restPitch).syncHeadPose(player);
 
         return this;
+    }
+
+    public Fixture turnOff(Player... player) {
+        return turnOff(true, player);
     }
 
     @Override

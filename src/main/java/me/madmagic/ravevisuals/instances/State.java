@@ -110,8 +110,8 @@ public class State {
     }
 
     public void applyTo(Fixture fixture) {
-        if (rotation != null && motion != null) {
-            fixture.setHeadPose((float) rotation.getX(), (float) rotation.getY())
+        if (rotation != null && motion == null) {
+            fixture.setHeadPose((float) rotation.getX(), (float) rotation.getZ())
                     .syncHeadPose();
         }
 
@@ -135,7 +135,7 @@ public class State {
             if (enable)
                 fixture.turnOn();
             else
-                fixture.turnOff();
+                fixture.turnOff(false);
         });
     }
 }

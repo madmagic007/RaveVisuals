@@ -24,7 +24,7 @@ public class Sequence {
         ConfigurationSection initialStateConfig = config.getConfigurationSection("initial");
         Util.runIfNotNull(initialStateConfig, stateConfig -> {
             if (stateConfig.contains("state"))
-                initialState = StateHandler.getByName(config.getString("state"));
+                initialState = StateHandler.getByName(stateConfig.getString("state"));
             else
                 initialState = new State(stateConfig);
         });
@@ -32,7 +32,7 @@ public class Sequence {
         ConfigurationSection finalStateConfig = config.getConfigurationSection("final");
         Util.runIfNotNull(finalStateConfig, stateConfig -> {
             if (stateConfig.contains("state"))
-                finalState = StateHandler.getByName(config.getString("state"));
+                finalState = StateHandler.getByName(stateConfig.getString("state"));
             else
                 finalState = new State(stateConfig);
         });

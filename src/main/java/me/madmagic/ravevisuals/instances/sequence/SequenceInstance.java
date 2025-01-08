@@ -2,6 +2,7 @@ package me.madmagic.ravevisuals.instances.sequence;
 
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.ents.Fixture;
+import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -43,7 +44,7 @@ public class SequenceInstance {
         SequencePart sequencePart = getNextSequencePart();
 
         if (!run || sequencePart == null) {
-            stop();
+            SequenceHandler.stopSequence(fixture);
             return;
         }
 
