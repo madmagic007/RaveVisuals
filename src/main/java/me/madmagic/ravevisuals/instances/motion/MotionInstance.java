@@ -62,7 +62,7 @@ public class MotionInstance {
         }
 
         Location location = fixture.getLocation();
-        int ticks = motion.delay;
+        int ticks = motion.delay.getInt();
 
         float deltaYaw = (float) ((vector.getX() - location.getYaw()) % 360);
         float stepYaw = PositioningHelper.fixRotation(deltaYaw) / ticks;
@@ -74,6 +74,8 @@ public class MotionInstance {
         float newPitch = location.getPitch();
 
         for (int i = 0; i < ticks; i++) {
+            if (motion.delay.getInt() != ticks) break; //handle live updates of var
+
             newYaw = PositioningHelper.fixRotation((newYaw + stepYaw + 360) % 360);
             newPitch = PositioningHelper.fixRotation((newPitch + stepPitch + 360) % 360);
 

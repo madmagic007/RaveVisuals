@@ -75,12 +75,11 @@ public class SequenceHandler {
 
     public static void stopSequence(Fixture fixture, boolean applyFinal) {
         Util.runIfNotNull(activeSequences.get(fixture), s -> {
+            activeSequences.remove(fixture);
             s.stop();
 
             if (applyFinal)
                 s.applyFinalStateToIfDefined(fixture);
-
-            activeSequences.remove(fixture);
         });
     }
 

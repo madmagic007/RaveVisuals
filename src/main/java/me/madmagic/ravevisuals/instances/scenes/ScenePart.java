@@ -4,8 +4,10 @@ import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.ents.Fixture;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
+import me.madmagic.ravevisuals.handlers.VarHandler;
 import me.madmagic.ravevisuals.handlers.anim.StateHandler;
 import me.madmagic.ravevisuals.instances.State;
+import me.madmagic.ravevisuals.instances.VarInstance;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
@@ -16,10 +18,10 @@ public class ScenePart {
 
     private final Map<Fixture, State> fixtures = new HashMap<>();
     private final Map<List<Fixture>, State> groups = new HashMap<>();
-    public final int afterDelay;
+    public final VarInstance afterDelay;
 
     public ScenePart(ConfigurationSection config) {
-        afterDelay = config.getInt("delay");
+        afterDelay = VarHandler.createFromConfig(config, "delay");
         config.set("delay", null); //remove key, so iteration below doesn't try to find fixture/group with name "delay"
 
         config.getKeys(false).forEach(key -> { //key is fixture or group name

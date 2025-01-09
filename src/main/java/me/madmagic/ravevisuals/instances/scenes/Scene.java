@@ -68,6 +68,6 @@ public class Scene {
 
                 startTask();
             }
-        }.runTaskLaterAsynchronously(Main.instance, scenePart.afterDelay);
+        }.runTaskLaterAsynchronously(Main.instance, scenePart.afterDelay.getInt());
     }
 }

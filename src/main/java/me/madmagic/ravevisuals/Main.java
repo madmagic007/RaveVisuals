@@ -32,6 +32,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventListener(), this);
 
         CommandBase.init();
+        VarConfig.init();
         FixtureConfig.init();
         GroupConfig.init();
         MotionConfig.init();

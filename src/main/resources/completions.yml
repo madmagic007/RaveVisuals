@@ -29,6 +29,10 @@ rv:
     start: /
     stop: /
 
+  var:
+    set: /
+    get: /
+
   reload: ""
 
   generateNewAuthorizationToken: ""

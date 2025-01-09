@@ -8,6 +8,10 @@ import org.json.JSONObject;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        System.out.println((int) 2.3);
+        System.out.println((int) 2.7);
+
+        if (true) return;
         OkHttpClient c = new OkHttpClient();
 
         JSONArray names = new JSONArray();

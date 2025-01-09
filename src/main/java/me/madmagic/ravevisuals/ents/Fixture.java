@@ -27,7 +27,6 @@ public class Fixture extends NMSArmorStand<Fixture> {
     public final float restPitch;
     public final float restYaw;
 
-
     public Fixture(Location location, String name, boolean showHead) {
         super(location);
 
@@ -47,11 +46,7 @@ public class Fixture extends NMSArmorStand<Fixture> {
         effect = Effect.fromConfig(config);
     }
 
-    public void turnOn(Player... player) {
-        isOn = true;
-
-        if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).syncHelmet(player);
-
+    private void startEffect() {
         Location clone = getLocation().clone();
         Vec3 eyePos = getEntity().getEyePosition();
         clone.add(eyePos.x, eyePos.y, eyePos.z);
@@ -59,31 +54,39 @@ public class Fixture extends NMSArmorStand<Fixture> {
         effect.start(clone);
     }
 
-    public Fixture turnOff(boolean resetHead, Player... player) {
+    public void turnOn() {
+        isOn = true;
+
+        if (showHead) setHeadTexture(HeadTexture.SPOT_BLUE).syncHelmet();
+
+        startEffect();
+    }
+
+    public Fixture turnOff(boolean resetHead, boolean stopAnims) {
         isOn = false;
 
-        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet(player);
+        if (showHead) setHeadTexture(HeadTexture.SPOT_OFF).syncHelmet();
         effect.stop();
-        
-        MotionHandler.stopMotion(this);
-        SequenceHandler.stopSequence(this);
 
-        if (resetHead) setHeadPose(restYaw, restPitch).syncHeadPose(player);
+        if (stopAnims) {
+            MotionHandler.stopMotion(this);
+            SequenceHandler.stopSequence(this);
+        }
+
+        if (resetHead) setHeadPose(restYaw, restPitch).syncHeadPose();
 
         return this;
     }
 
-    public Fixture turnOff(Player... player) {
-        return turnOff(true, player);
+    public Fixture turnOff() {
+        return turnOff(true, true);
     }
 
     @Override
     public Fixture syncAll(Player... player) {
         syncHelmet(player);
 
-        if (isOn && effect.effect.equals(Effect.EffectType.GUARDIAN)) {
-            effect.guardian.spawn(player);
-        }
+        if (isOn) startEffect();
 
         super.syncAll(player);
 
@@ -158,8 +161,8 @@ public class Fixture extends NMSArmorStand<Fixture> {
         particleSection.set("shape", effect.shape.toString().toLowerCase());
         particleSection.set("color", String.format("#%06X", (0xFFFFFF & effect.col.asRGB())));
         particleSection.set("direction", effect.dirToString());
-        particleSection.set("speed", effect.speed);
-        particleSection.set("amount", effect.amount);
-        particleSection.set("length", effect.length);
+        particleSection.set("speed", effect.speed.getForSaving());
+        particleSection.set("amount", effect.amount.getForSaving());
+        particleSection.set("length", effect.length.getForSaving());
     }
 }

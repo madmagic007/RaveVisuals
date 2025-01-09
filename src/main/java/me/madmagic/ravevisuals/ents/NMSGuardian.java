@@ -1,6 +1,7 @@
 package me.madmagic.ravevisuals.ents;
 
 import me.madmagic.ravevisuals.Main;
+import me.madmagic.ravevisuals.instances.VarInstance;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.EntityType;
@@ -14,19 +15,19 @@ public class NMSGuardian extends NMSEntity<NMSGuardian, Guardian> {
 
     protected NMSArmorStand target;
 
-    public NMSGuardian(Location location, double beamLength) {
+    public NMSGuardian(Location location, VarInstance beamLength) {
         super(Guardian.class, EntityType.GUARDIAN, location.subtract(0, 0.47, 0));
 
         target = new NMSArmorStand(calcTargetLocation(location, beamLength));
     }
 
-    private Location calcTargetLocation(Location location, double beamLength) {
+    private Location calcTargetLocation(Location location, VarInstance beamLength) {
         Location targetLoc = location.clone();
-        Vector dir = targetLoc.getDirection().multiply(beamLength);
+        Vector dir = targetLoc.getDirection().multiply(beamLength.getDouble());
         return targetLoc.add(dir).subtract(0, 0.58, 0);
     }
 
-    public NMSGuardian updateBeam(Location location, double beamLength) {
+    public NMSGuardian updateBeam(Location location, VarInstance beamLength) {
         target.setLocation(calcTargetLocation(location, beamLength));
         setLocation(location);
 

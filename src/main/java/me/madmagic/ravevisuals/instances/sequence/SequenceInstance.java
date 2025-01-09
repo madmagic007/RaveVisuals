@@ -42,8 +42,11 @@ public class SequenceInstance {
 
     public void startTask() {
         SequencePart sequencePart = getNextSequencePart();
+        if (!run)
+             return;
 
-        if (!run || sequencePart == null) {
+        if (sequencePart == null) {
+            run = false;
             SequenceHandler.stopSequence(fixture);
             return;
         }
@@ -57,7 +60,7 @@ public class SequenceInstance {
 
                 startTask();
             }
-        }.runTaskLaterAsynchronously(Main.instance, sequencePart.afterDelay);
+        }.runTaskLaterAsynchronously(Main.instance, sequencePart.afterDelay.getInt());
     }
 
     public void applyInitialStateToIfDefined(Fixture fixture) {

@@ -135,7 +135,7 @@ public class State {
             if (enable)
                 fixture.turnOn();
             else
-                fixture.turnOff(false);
+                fixture.turnOff(false, false);
         });
     }
 }
