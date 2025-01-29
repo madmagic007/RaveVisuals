@@ -1,7 +1,6 @@
 package me.madmagic.ravevisuals.handlers;
 
-import me.madmagic.ravevisuals.fixture.Fixture;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.ents.Fixture;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,28 +14,45 @@ public class EditorHandler {
     public static void startEditMode(Player player) {
         if (editingPlayers.containsKey(player.getUniqueId())) return;
         editingPlayers.put(player.getUniqueId(), new EditingPlayer(null));
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setInvisible(false).setCustomName(s).update(player));
+
+        FixtureHandler.forEach(f -> f.setCustomNameVisible(true, player));
+
         startTimer();
     }
 
     public static void stopEditMode(Player player) {
         EditingPlayer ep = editingPlayers.get(player.getUniqueId());
         if (ep == null) return;
+
         ep.stopEditingFixture();
         editingPlayers.remove(player.getUniqueId());
-        FixtureHandler.activeFixtures.forEach((s, f) -> f.setInvisible(true).hideCustomName().update(player));
         if (editingPlayers.isEmpty()) stopTimer();
+
+        FixtureHandler.forEach(f -> f.setCustomNameVisible(false, player));
     }
 
     public static void editFixture(Player player, Fixture fixture) {
         EditingPlayer ep = editingPlayers.get(player.getUniqueId());
         if (ep == null) return;
+
         if (fixture.equals(ep.f)) {
             ep.stopEditingFixture();
             return;
         }
+
         ep.startEditingFixture(fixture);
     }
+
+    public static void reload() {
+        editingPlayers.forEach((uuid, ep) -> {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p == null || !p.isOnline())
+                return;
+
+            FixtureHandler.forEach(f -> f.setCustomNameVisible(true, p));
+        });
+    }
+
 
     private static Timer editTimer;
     private static void startTimer() {
@@ -59,8 +75,9 @@ public class EditorHandler {
                     }
 
                     if (ep.f == null) return;
+
                     Location loc = PositioningHelper.inFrontOfLookAt(p, 2).subtract(0, 1.7, 0);
-                    ep.f.setHeadPose(loc.getYaw(), loc.getPitch()).setLocation(loc).update();
+                    ep.f.setLocation(loc).setHeadPose(loc.getYaw(), loc.getPitch()).syncHeadPose();
                 });
 
                 offline.forEach(editingPlayers::remove);

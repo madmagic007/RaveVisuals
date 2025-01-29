@@ -3,19 +3,30 @@ package me.madmagic.ravevisuals.handlers;
 import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.commands.subcommands.GroupSubCommand;
 import me.madmagic.ravevisuals.config.GroupConfig;
-import me.madmagic.ravevisuals.fixture.Effect;
-import me.madmagic.ravevisuals.fixture.Fixture;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.ents.Fixture;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GroupHandler {
 
-    public static Map<String, List<Fixture>> groups = new HashMap<>();
+    private static Map<String, List<Fixture>> groups = new HashMap<>();
+
+    public static void add(String name, List<Fixture> fixtures) {
+        groups.put(name, fixtures);
+    }
+
+    public static List<String> getLoadedGroupNames() {
+        return groups.keySet().stream().toList();
+    }
+
+    public static List<Fixture> getByName(String name) {
+        return groups.get(name);
+    }
 
     public static void deleteGroup(CommandSender sender, String[] args) {
         String gName = args[1];
@@ -40,7 +51,7 @@ public class GroupHandler {
         }
 
         List<Fixture> finalList = list;
-        fNames.forEach(fName -> Util.runIfNotNull(FixtureHandler.activeFixtures.get(fName), f -> {
+        fNames.forEach(fName -> Util.runIfNotNull(FixtureHandler.getByName(fName), f -> {
             if (add && !finalList.contains(f)) {
                 finalList.add(f);
                 sender.sendMessage("Fixture added to group");
@@ -62,10 +73,6 @@ public class GroupHandler {
         Util.runIfNotNull(groups.get(args[1]), g -> toggleAll(g, args[0].equals("start")), () -> sender.sendMessage("Group not found"));
     }
 
-    public static void toggleAll(String groupName, boolean on) {
-        toggleAll(groups.get(groupName), on);
-    }
-
     public static void toggleAll(List<Fixture> list, boolean on) {
         if (list == null) return;
         list.forEach(fixture -> {
@@ -74,15 +81,15 @@ public class GroupHandler {
         });
     }
 
-    public static void setAllColor(String groupName, Color color) {
-        Util.runIfNotNull(groups.get(groupName), g -> g.forEach(f -> f.effect.col = color));
-    }
+    public static YamlConfiguration createConfig() {
+        YamlConfiguration config = new YamlConfiguration();
 
-    public static void setAllBeamType(String groupName, Effect.EffectType beamType) {
-        Util.runIfNotNull(groups.get(groupName), g -> g.forEach(f -> f.changeBeamTypeRunning(beamType)));
-    }
+        groups.forEach((s, l) -> {
+            List<String> names = new ArrayList<>();
+            l.forEach(f -> names.add(f.name));
+            config.set(s, names);
+        });
 
-    public static void setAllHeadPose(String groupName, float pitch, float yaw) {
-        Util.runIfNotNull(groups.get(groupName), g -> g.forEach(f -> f.setHeadPose(pitch, yaw)));
+        return config;
     }
 }

@@ -5,20 +5,65 @@ plugins {
 libsDirName = '..'
 archivesBaseName = rootProject.name
 
+sourceCompatibility = JavaVersion.VERSION_23
+targetCompatibility = JavaVersion.VERSION_23
+
 repositories {
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    //maven { url "https://repo.dmulloy2.net/repository/public/" }
+
     mavenLocal()
-    jcenter()
-    maven {url "https://repo.dmulloy2.net/repository/public/"}
 }
 dependencies {
-    compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
-    implementation 'xyz.xenondevs:particle:1.8.1'
+    compileOnly 'org.spigotmc:spigot:1.21.3-R0.1-SNAPSHOT:remapped-mojang'
+    compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
+    compileOnly files("libs/ProtocolLib.jar")
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+
+    implementation 'org.json:json:20241224'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task copyJar(type: Copy) {
+    from jar
+    into "C:\\Users\\MadMagic\\Documents\\appFiles\\minecraft\\servers\\1.20.3\\plugins"
+}
+
+jar.finalizedBy copyJar
+
+task buildAndReloadPlugin(dependsOn: jar) {
+    doLast {
+        sleep(1000)
+        def url = 'http://localhost:16522/reload'  // Replace with the actual URL
+        def token = 'your-auth-token'  // Replace with your actual token
+
+        def connection = new URL(url).openConnection() as HttpURLConnection
+        connection.setRequestMethod('GET')
+        connection.setRequestProperty('Authorization', token)
+        connection.setRequestProperty('Accept', 'application/json')
+
+        try {
+            def responseCode = connection.responseCode
+            println "Response Code: $responseCode"
+
+            if (responseCode == 200) {
+                def response = connection.inputStream.text
+                println "Response: $response"
+            } else {
+                println "Error: ${connection.errorStream.text}"
+            }
+        } catch (Exception e) {
+        }
     }
 }

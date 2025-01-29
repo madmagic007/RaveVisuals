@@ -5,7 +5,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.handlers.EditorHandler;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureHandler;
+import me.madmagic.ravevisuals.handlers.FixtureHandler;
 
 public class PacketListener {
 
@@ -15,7 +15,7 @@ public class PacketListener {
             public void onPacketReceiving(PacketEvent event) {
                 int entId = event.getPacket().getIntegers().read(0);
 
-                FixtureHandler.activeFixtures.forEach((s, f) -> {
+                FixtureHandler.forEach(f -> {
                     if (f.entityId() == entId) EditorHandler.editFixture(event.getPlayer(), f);
                 });
             }

@@ -1,8 +1,8 @@
 package me.madmagic.ravevisuals.config;
 
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.handlers.fixtures.FixtureAnim;
-import me.madmagic.ravevisuals.handlers.fixtures.Motion;
+import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
+import me.madmagic.ravevisuals.instances.motion.Motion;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -15,8 +15,8 @@ public class MotionConfig {
         try {
             file.createNewFile();
         } catch (Exception ignored) {}
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        config.getKeys(false).forEach(name -> FixtureAnim.motions.put(name, new Motion(config.getConfigurationSection(name), name)));
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+        config.getKeys(false).forEach(name -> MotionHandler.add(name, new Motion(config.getConfigurationSection(name), name)));
     }
 }

@@ -8,6 +8,9 @@ rv:
     stop: /
     startmotion: //
     stopmotion: /
+    startsequence: //
+    stopsequence: /
+    applystate: //
 
   group:
     create: //
@@ -18,7 +21,20 @@ rv:
     stop: /
     startmotion: //
     stopmotion: /
+    startsequence: //
+    stopsequence: /
+    applystate: //
 
-  scenario: /
+  scene:
+    start: /
+    stop: /
+
+  var:
+    set: /
+    get: /
+
+  commands: /
 
   reload: ""
+
+  generateNewAuthorizationToken: ""

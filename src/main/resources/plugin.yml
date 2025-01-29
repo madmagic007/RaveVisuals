@@ -8,4 +8,4 @@ depend: [ ProtocolLib ]
 commands:
   rv:
     description: a command
-    usage: /<command> [reload, fixture, group, scenario]
+    usage: /<command> [reload, fixture, group, scene, generateNewAuthorizationToken, var]
