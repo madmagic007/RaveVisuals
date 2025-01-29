@@ -50,8 +50,7 @@ public class FixtureHandler {
     }
 
     public static void createFromConfig(String name, ConfigurationSection conf) {
-        Location loc = conf.getLocation("location");
-        Fixture f = new Fixture(loc, name, conf);
+        Fixture f = new Fixture(name, conf);
         f.spawn().syncAll();
 
         activeFixtures.put(name, f);

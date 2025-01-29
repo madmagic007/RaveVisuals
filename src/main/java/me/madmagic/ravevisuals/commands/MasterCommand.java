@@ -1,12 +1,10 @@
 package me.madmagic.ravevisuals.commands;
 
+import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.api.ApiServerHandler;
 import me.madmagic.ravevisuals.commands.subcommands.*;
-import me.madmagic.ravevisuals.handlers.EditorHandler;
-import me.madmagic.ravevisuals.handlers.GroupHandler;
-import me.madmagic.ravevisuals.handlers.VarHandler;
+import me.madmagic.ravevisuals.handlers.*;
 import me.madmagic.ravevisuals.handlers.anim.MotionHandler;
-import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.anim.SceneHandler;
 import me.madmagic.ravevisuals.handlers.anim.SequenceHandler;
 import me.madmagic.ravevisuals.handlers.anim.StateHandler;
@@ -32,7 +30,9 @@ public class MasterCommand extends CommandBase {
         if (subName.isEmpty()) return false;
 
         if (subName.equals("reload")) {
+            Main.pluginConfig = Main.instance.getConfig();
             VarHandler.reload();
+            CommandsHandler.reload();
             FixtureHandler.reload();
             GroupHandler.reload();
             MotionHandler.reload();
@@ -74,6 +74,6 @@ public class MasterCommand extends CommandBase {
     }
 
     private final List<SubCommand> subCommands = Arrays.asList(
-            new FixtureSubCommand(), new GroupSubCommand(), new SceneSubCommand(), new NewAuthCommand(), new VarCommand()
+            new FixtureSubCommand(), new GroupSubCommand(), new SceneSubCommand(), new NewAuthCommand(), new VarCommand(), new CommandsCommand()
     );
 }

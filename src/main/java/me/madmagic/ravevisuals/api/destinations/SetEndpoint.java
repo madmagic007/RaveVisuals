@@ -29,8 +29,6 @@ public class SetEndpoint extends DestinationIMPL {
         String json = files.get("postData");
         if (StringUtil.isNullOrEmpty(json)) return badRequest("No post data received.");
 
-        System.out.println(json);
-
         JSONObject postData = new JSONObject(json);
         ApiSetInstance instance = new ApiSetInstance();
 

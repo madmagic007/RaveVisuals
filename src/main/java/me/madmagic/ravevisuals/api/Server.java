@@ -2,7 +2,7 @@ package me.madmagic.ravevisuals.api;
 
 import fi.iki.elonen.NanoHTTPD;
 import me.madmagic.ravevisuals.Main;
-import me.madmagic.ravevisuals.api.destinations.SetEndpoint;
+import me.madmagic.ravevisuals.api.destinations.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,5 +58,5 @@ public class Server extends NanoHTTPD {
         return DestinationIMPL.notFound();
     }
 
-    private static final List<DestinationIMPL> destinations = Arrays.asList(new SetEndpoint());
+    private static final List<DestinationIMPL> destinations = Arrays.asList(new SetEndpoint(), new SetVarEndpoint(), new ReloadEndpoint(), new CommandsEndpoint(), new SceneEndpoint());
 }

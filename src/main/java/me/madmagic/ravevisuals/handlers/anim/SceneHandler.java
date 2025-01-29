@@ -17,16 +17,30 @@ public class SceneHandler {
         scenes.put(name, scene);
     }
 
+    public static Scene getByName(String name) {
+        return scenes.get(name);
+    }
+
     public static List<String> getLoadedSceneNames() {
         return scenes.keySet().stream().toList();
     }
 
     public static void startSceneFromCommand(CommandSender sender, String scenarioName) {
-        Util.runIfNotNull(scenes.get(scenarioName), Scene::startTask, () -> sender.sendMessage("Scenario not found"));
+        Util.runIfNotNull(scenes.get(scenarioName), SceneHandler::startScene, () -> sender.sendMessage("Scenario not found"));
     }
 
     public static void stopSceneFromCommand(CommandSender sender, String scenarioName) {
-        Util.runIfNotNull(scenes.get(scenarioName), Scene::stop, () -> sender.sendMessage("Scenario not found"));
+        Util.runIfNotNull(scenes.get(scenarioName), SceneHandler::stopScene, () -> sender.sendMessage("Scenario not found"));
+    }
+
+    public static void startScene(Scene scene) {
+        scene.runInitialIfDefined();
+        scene.start();
+    }
+
+    public static void stopScene(Scene scene) {
+        scene.stop();
+        scene.runFinalIfDefined();
     }
 
     public static void reload() {

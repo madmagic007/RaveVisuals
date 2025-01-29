@@ -64,7 +64,7 @@ public class SequenceHandler {
 
         SequenceInstance sequenceInstance = new SequenceInstance(fixture, sequence);
         sequenceInstance.applyInitialStateToIfDefined(fixture);
-        sequenceInstance.startTask();
+        sequenceInstance.start();
 
         activeSequences.put(fixture, sequenceInstance);
     }

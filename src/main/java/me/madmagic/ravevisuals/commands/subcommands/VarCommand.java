@@ -22,8 +22,8 @@ public class VarCommand extends SubCommand {
 
         switch (args[0]) {
             case "set" -> {
-                var.setValue(Double.parseDouble(args[2]));
-                sender.sendMessage(String.format("Set the value of %s to %s", args[1], var));
+                VarHandler.setValue(var, args[2]);
+                sender.sendMessage(String.format("Set %s to: %s", args[1], var));
             }
             case "get" -> sender.sendMessage(args[1] + ": " + var);
         }

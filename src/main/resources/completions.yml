@@ -33,6 +33,8 @@ rv:
     set: /
     get: /
 
+  commands: /
+
   reload: ""
 
   generateNewAuthorizationToken: ""

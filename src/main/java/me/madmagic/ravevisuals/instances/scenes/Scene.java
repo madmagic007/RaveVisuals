@@ -11,7 +11,9 @@ import java.util.List;
 
 public class Scene {
 
-    public List<ScenePart> sceneParts = new ArrayList<>();
+    private final List<ScenePart> sceneParts = new ArrayList<>();
+    private ScenePart initialPart;
+    private ScenePart finalPart;
     private int repetitions;
     private BukkitTask sceneTask;
     private boolean run = true;
@@ -25,9 +27,19 @@ public class Scene {
 
         ConfigurationSection sceneSection = config.getConfigurationSection("scene");
         Util.runIfNotNull(sceneSection, sceneConfig ->
-            sceneConfig.getKeys(false).forEach(key ->
-                sceneParts.add(new ScenePart(config.getConfigurationSection(key)))
-            )
+                sceneConfig.getKeys(false).forEach(key ->
+                        sceneParts.add(new ScenePart(sceneConfig.getConfigurationSection(key)))
+                )
+        );
+
+        ConfigurationSection initialCfg = config.getConfigurationSection("initial");
+        Util.runIfNotNull(initialCfg, cfg ->
+                initialPart = new ScenePart(cfg)
+        );
+
+        ConfigurationSection finalCfg = config.getConfigurationSection("final");
+        Util.runIfNotNull(finalCfg, cfg ->
+                finalPart = new ScenePart(cfg)
         );
     }
 
@@ -51,7 +63,12 @@ public class Scene {
         run = false;
     }
 
-    public void startTask() {
+    public void start() {
+        run = true;
+        startTask();
+    }
+
+    private void startTask() {
         ScenePart scenePart = getNextScenePart();
 
         if (!run || scenePart == null) {
@@ -69,5 +86,13 @@ public class Scene {
                 startTask();
             }
         }.runTaskLaterAsynchronously(Main.instance, scenePart.afterDelay.getInt());
+    }
+
+    public void runInitialIfDefined() {
+        Util.runIfNotNull(initialPart, ScenePart::run);
+    }
+
+    public void runFinalIfDefined() {
+        Util.runIfNotNull(finalPart, ScenePart::run);
     }
 }

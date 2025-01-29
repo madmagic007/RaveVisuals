@@ -68,7 +68,6 @@ public class PackerSender {
 
         is.getFloat()
                 .write(0, location.getYaw());
-//                .write(1, location.getYaw());
 
         sendPacket(packet, player);
     }

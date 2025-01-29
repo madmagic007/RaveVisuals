@@ -8,26 +8,16 @@ import org.json.JSONObject;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        System.out.println((int) 2.3);
-        System.out.println((int) 2.7);
-
-        if (true) return;
         OkHttpClient c = new OkHttpClient();
 
-        JSONArray names = new JSONArray();
-        names.put("left");
-        names.put("right");
+        JSONObject post = new JSONObject();
 
-        JSONObject post = new JSONObject()
-                .put("fixtureNames", names)
-                .put("state", new JSONObject()
-                        .put("motion", "square")
-                );
+        post.put("stop", new JSONArray().put("bulbsWave"));
 
         RequestBody rb = RequestBody.create(post.toString(), MediaType.parse("application/json"));
 
         Request r = new Request.Builder()
-                .url("http:localhost:16522/set")
+                .url("http:localhost:16522/scene")
                 .post(rb)
                 .build();
 

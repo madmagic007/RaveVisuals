@@ -46,14 +46,10 @@ public class Sequence {
     }
 
     public void applyInitialStateToIfDefined(Fixture fixture) {
-        if (initialState == null) return;
-
-        initialState.applyTo(fixture);
+        Util.runIfNotNull(initialState, s -> s.applyTo(fixture));
     }
 
     public void applyFinalStateToIfDefined(Fixture fixture) {
-        if (finalState == null) return;
-
-        finalState.applyTo(fixture);
+        Util.runIfNotNull(finalState, s -> s.applyTo(fixture));
     }
 }

@@ -40,7 +40,12 @@ public class SequenceInstance {
         run = false;
     }
 
-    public void startTask() {
+    public void start() {
+        run = true;
+        startTask();
+    }
+
+    private void startTask() {
         SequencePart sequencePart = getNextSequencePart();
         if (!run)
              return;

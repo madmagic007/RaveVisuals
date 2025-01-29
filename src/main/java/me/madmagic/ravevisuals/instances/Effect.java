@@ -30,6 +30,10 @@ public class Effect {
     public VarInstance amount = new VarInstance(0);
     public VarInstance length = new VarInstance(16);
 
+    public Effect() {
+        length.setOnChanged(this::lengthChangeUpdate);
+    }
+
     public NMSGuardian guardian;
     public static Effect fromConfig(ConfigurationSection config) {
         Effect effect = new Effect();
@@ -47,6 +51,7 @@ public class Effect {
         double[] split = Stream.of(config.getString("direction").split(";")).mapToDouble(Double::parseDouble).toArray();
         effect.directionModifier = new Vector(split[0], split[1], split[2]);
 
+        effect.length.setOnChanged(effect::lengthChangeUpdate);
 
         return effect;
     }
@@ -139,6 +144,14 @@ public class Effect {
     public void setGuardianTarget(Location location) {
         if (guardian != null) guardian.updateBeam(location, length);
     }
+
+    private void lengthChangeUpdate() {
+        if (guardian == null) return;
+
+        Main.console.sendMessage("updating");
+        guardian.updateBeam(guardian.getLocation(), length).syncBeam();
+    }
+
 
     public enum EffectType {
         GUARDIAN,

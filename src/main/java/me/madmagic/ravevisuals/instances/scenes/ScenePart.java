@@ -2,6 +2,7 @@ package me.madmagic.ravevisuals.instances.scenes;
 
 import me.madmagic.ravevisuals.Util;
 import me.madmagic.ravevisuals.ents.Fixture;
+import me.madmagic.ravevisuals.handlers.CommandsHandler;
 import me.madmagic.ravevisuals.handlers.FixtureHandler;
 import me.madmagic.ravevisuals.handlers.GroupHandler;
 import me.madmagic.ravevisuals.handlers.VarHandler;
@@ -10,19 +11,45 @@ import me.madmagic.ravevisuals.instances.State;
 import me.madmagic.ravevisuals.instances.VarInstance;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ScenePart {
 
     private final Map<Fixture, State> fixtures = new HashMap<>();
     private final Map<List<Fixture>, State> groups = new HashMap<>();
-    public final VarInstance afterDelay;
+    private final Map<VarInstance, Object> vars = new HashMap<>();
+    private List<String> commands = new ArrayList<>();
+    public VarInstance afterDelay = new VarInstance(0);
 
     public ScenePart(ConfigurationSection config) {
-        afterDelay = VarHandler.createFromConfig(config, "delay");
-        config.set("delay", null); //remove key, so iteration below doesn't try to find fixture/group with name "delay"
+        if (config.contains("delay")) {
+            afterDelay = VarHandler.createFromConfig(config, "delay");
+            config.set("delay", null); //remove key, so iteration below doesn't try to find fixture/group with name "delay"
+        }
+
+        Util.runIfNotNull(config.getConfigurationSection("vars"), varsSection ->
+                varsSection.getKeys(false).forEach(varName -> {
+                    Object value = varsSection.get(varName);
+
+                    Util.runIfNotNull(VarHandler.getByName(varName), var ->
+                            vars.put(var, value)
+                    );
+                })
+        );
+        config.set("vars", null); //remove key, so iteration below doesn't try to find fixture/group with name "vars"
+
+        Util.runIfNotNull(config.get("commands"), commandsValue -> {
+            if (commandsValue instanceof String name) {
+                Util.runIfNotNull(CommandsHandler.getByName(name), commands::addAll, () -> commands.add(name));
+            } else if (commandsValue instanceof List list) {
+                list.forEach(o -> {
+                    if (!(o instanceof String str)) return;
+
+                    Util.runIfNotNull(CommandsHandler.getByName(str), commands::addAll, () -> commands.add(str));
+                });
+            }
+        });
+        config.set("commands", null); //remove key, so iteration below doesn't try to find fixture/group with name "commands"
 
         config.getKeys(false).forEach(key -> { //key is fixture or group name
             ConfigurationSection stateConfig = config.getConfigurationSection(key);
@@ -46,6 +73,10 @@ public class ScenePart {
     public void run() {
         fixtures.forEach(this::runOnFixture);
         groups.forEach((list, s) -> list.forEach(f -> runOnFixture(f, s)));
+
+        vars.forEach(VarHandler::setValue);
+
+        CommandsHandler.runCommands(commands);
     }
 
     private void runOnFixture(Fixture fixture, State state) {

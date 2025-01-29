@@ -36,8 +36,34 @@ jar {
 }
 
 task copyJar(type: Copy) {
-    from jar // shortcut for createJar.outputs.files
+    from jar
     into "C:\\Users\\MadMagic\\Documents\\appFiles\\minecraft\\servers\\1.20.3\\plugins"
 }
 
 jar.finalizedBy copyJar
+
+task buildAndReloadPlugin(dependsOn: jar) {
+    doLast {
+        sleep(1000)
+        def url = 'http://localhost:16522/reload'  // Replace with the actual URL
+        def token = 'your-auth-token'  // Replace with your actual token
+
+        def connection = new URL(url).openConnection() as HttpURLConnection
+        connection.setRequestMethod('GET')
+        connection.setRequestProperty('Authorization', token)
+        connection.setRequestProperty('Accept', 'application/json')
+
+        try {
+            def responseCode = connection.responseCode
+            println "Response Code: $responseCode"
+
+            if (responseCode == 200) {
+                def response = connection.inputStream.text
+                println "Response: $response"
+            } else {
+                println "Error: ${connection.errorStream.text}"
+            }
+        } catch (Exception e) {
+        }
+    }
+}

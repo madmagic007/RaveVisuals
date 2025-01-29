@@ -33,6 +33,7 @@ public final class Main extends JavaPlugin {
 
         CommandBase.init();
         VarConfig.init();
+        CommandsConfig.init();
         FixtureConfig.init();
         GroupConfig.init();
         MotionConfig.init();

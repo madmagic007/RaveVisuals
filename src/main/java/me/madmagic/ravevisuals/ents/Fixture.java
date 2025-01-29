@@ -40,8 +40,8 @@ public class Fixture extends NMSArmorStand<Fixture> {
         if (showHead) setHeadTexture(HeadTexture.SPOT_OFF);
     }
 
-    public Fixture(Location location, String name, ConfigurationSection config) {
-        this(location, name, config.getBoolean("head"));
+    public Fixture(String name, ConfigurationSection config) {
+        this(config.getLocation("location"), name, config.getBoolean("head"));
 
         effect = Effect.fromConfig(config);
     }
