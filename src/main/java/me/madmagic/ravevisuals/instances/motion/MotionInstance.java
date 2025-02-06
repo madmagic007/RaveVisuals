@@ -24,10 +24,10 @@ public class MotionInstance {
     }
 
     public Vector getNextVector() {
-        Vector vector = motion.motions.get(curPos);
-
-        curPos++;
         if (curPos >= motion.motions.size()) curPos = 0;
+
+        Vector vector = motion.motions.get(curPos);
+        curPos++;
 
         return vector;
     }
@@ -38,7 +38,14 @@ public class MotionInstance {
         run = false;
     }
 
-    public void startTask() {
+    public void start() {
+        curPos = 0;
+
+        run = true;
+        startTask();
+    }
+
+    private void startTask() {
         if (!run) return;
 
         Vector nextVec = getNextVector();

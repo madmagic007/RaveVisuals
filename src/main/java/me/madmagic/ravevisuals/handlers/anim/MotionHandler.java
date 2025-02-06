@@ -72,7 +72,7 @@ public class MotionHandler {
             fixture.setHeadPose((float) initPos.getX(), (float) initPos.getY()).syncMetaData();
         }
 
-        motionInstance.startTask();
+        motionInstance.start();
         activeMotions.put(fixture, motionInstance);
     }
 

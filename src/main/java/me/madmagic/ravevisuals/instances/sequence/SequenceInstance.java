@@ -21,15 +21,15 @@ public class SequenceInstance {
     }
 
     private SequencePart getNextSequencePart() {
-        SequencePart sequencePart = sequence.sequenceParts.get(curPos);
-
-        curPos++;
-        if (curPos >= sequence.sequenceParts.size()) {
+        if (curPos > sequence.sequenceParts.size() - 1) {
             curPos = 0;
             curRepetition++;
 
             if (curRepetition >= sequence.repetitions && sequence.repetitions != 0) return null;
         }
+
+        SequencePart sequencePart = sequence.sequenceParts.get(curPos);
+        curPos++;
 
         return sequencePart;
     }
@@ -41,18 +41,26 @@ public class SequenceInstance {
     }
 
     public void start() {
+        curPos = 0;
+        curRepetition = 0;
+
         run = true;
         startTask();
     }
 
     private void startTask() {
+        if (!run) return;
+
         SequencePart sequencePart = getNextSequencePart();
-        if (!run)
-             return;
 
         if (sequencePart == null) {
             run = false;
-            SequenceHandler.stopSequence(fixture);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SequenceHandler.stopSequence(fixture, true);
+                }
+            }.runTaskLaterAsynchronously(Main.instance, 2);
             return;
         }
 

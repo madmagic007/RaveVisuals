@@ -2,6 +2,7 @@ package me.madmagic.ravevisuals.instances.scenes;
 
 import me.madmagic.ravevisuals.Main;
 import me.madmagic.ravevisuals.Util;
+import me.madmagic.ravevisuals.handlers.anim.SceneHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -44,15 +45,15 @@ public class Scene {
     }
 
     private ScenePart getNextScenePart() {
-        ScenePart scenePart = sceneParts.get(curPos);
-
-        curPos++;
-        if (curPos >= sceneParts.size()) {
+        if (curPos > sceneParts.size() - 1) {
             curPos = 0;
             curRepetition++;
 
             if (curRepetition >= repetitions && repetitions != 0) return null;
         }
+
+        ScenePart scenePart = sceneParts.get(curPos);
+        curPos++;
 
         return scenePart;
     }
@@ -64,15 +65,25 @@ public class Scene {
     }
 
     public void start() {
+        curPos = 0;
+        curRepetition = 0;
+
         run = true;
         startTask();
     }
 
     private void startTask() {
+        if (!run) return;
+
         ScenePart scenePart = getNextScenePart();
 
-        if (!run || scenePart == null) {
-            stop();
+        if (scenePart == null) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SceneHandler.stopScene(Scene.this);
+                }
+            }.runTaskLaterAsynchronously(Main.instance, 2);
             return;
         }
 
