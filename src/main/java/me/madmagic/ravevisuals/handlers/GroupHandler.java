@@ -8,13 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GroupHandler {
 
-    private static Map<String, List<Fixture>> groups = new HashMap<>();
+    private static Map<String, List<Fixture>> groups = new LinkedHashMap<>();
 
     public static void add(String name, List<Fixture> fixtures) {
         groups.put(name, fixtures);
@@ -82,14 +82,25 @@ public class GroupHandler {
     }
 
     public static YamlConfiguration createConfig() {
-        YamlConfiguration config = new YamlConfiguration();
+        StringBuilder sb = new StringBuilder();
 
         groups.forEach((s, l) -> {
+            YamlConfiguration groupRoot = new YamlConfiguration();
+
             List<String> names = new ArrayList<>();
             l.forEach(f -> names.add(f.name));
-            config.set(s, names);
+
+            groupRoot.set(s, names);
         });
 
-        return config;
+        YamlConfiguration conf = new YamlConfiguration();
+
+        try {
+            conf.loadFromString(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return conf;
     }
 }

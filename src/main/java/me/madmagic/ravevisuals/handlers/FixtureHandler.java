@@ -11,13 +11,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class FixtureHandler {
 
-    private static HashMap<String, Fixture> activeFixtures = new HashMap<>();
+    private static Map<String, Fixture> activeFixtures = new LinkedHashMap<>();
 
     public static Fixture getByName(String name) {
         return activeFixtures.get(name);
@@ -108,12 +109,23 @@ public class FixtureHandler {
     }
 
     public static YamlConfiguration createConfig() {
-        YamlConfiguration conf = new YamlConfiguration();
+        StringBuilder sb = new StringBuilder();
 
         activeFixtures.forEach((name, fixture) -> {
-            ConfigurationSection section = conf.createSection(name);
-            fixture.saveToConfig(section);
+            YamlConfiguration fixtureRoot = new YamlConfiguration();
+            ConfigurationSection fixtureConf = fixtureRoot.createSection(name);
+            fixture.saveToConfig(fixtureConf);
+
+            sb.append(fixtureRoot.saveToString()).append("\n");
         });
+
+        YamlConfiguration conf = new YamlConfiguration();
+
+        try {
+            conf.loadFromString(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return conf;
     }
