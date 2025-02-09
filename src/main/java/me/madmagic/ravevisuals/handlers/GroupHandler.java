@@ -91,6 +91,8 @@ public class GroupHandler {
             l.forEach(f -> names.add(f.name));
 
             groupRoot.set(s, names);
+
+            sb.append(groupRoot.saveToString()).append("\n");
         });
 
         YamlConfiguration conf = new YamlConfiguration();
